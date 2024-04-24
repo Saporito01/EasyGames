@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/png" href="./images/logo_scheda.png"/>
 <title>EasyGames</title>
 </head>
 <body>
