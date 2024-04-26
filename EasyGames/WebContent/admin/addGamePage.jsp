@@ -15,7 +15,7 @@
 
 <div class="main">
 
-<form action="" enctype="multipart/form-data" method="post">
+<form action="../addGame" enctype="multipart/form-data" method="post">
 
 Id: <input type="text" name="id" required><br><br>
 

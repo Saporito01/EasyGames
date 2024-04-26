@@ -17,7 +17,7 @@ public class Cart {
 	
 	public void deleteProduct(Game product) {
 		for(Game prod : products) {
-			if(prod.getId() == product.getId()) {
+			if((prod.getId()).equalsIgnoreCase(product.getId())) {
 				products.remove(prod);
 				break;
 			}

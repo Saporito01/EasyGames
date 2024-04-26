@@ -8,27 +8,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import org.apache.tomcat.jdbc.pool.DataSource;
+
 import it.easygames.model.bean.Game;
 
-public class GameDaoDataSource implements IGameDao{
-	
-	private static DataSource ds;
-
-	static {
-		try {
-			Context initCtx = new InitialContext();
-			Context envCtx = (Context) initCtx.lookup("java:comp/env");
-
-			ds = (DataSource) envCtx.lookup("jdbc/easygames");
-
-		} catch (NamingException e) {
-			System.out.println("Error:" + e.getMessage());
-		}
-	}
+public class GameDaoDriverMan implements IGameDao{
 	
 private static final String TABLE_NAME = "gioco";
 	
@@ -38,11 +21,11 @@ private static final String TABLE_NAME = "gioco";
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		String insertSQL = "INSERT INTO " + GameDaoDataSource.TABLE_NAME
+		String insertSQL = "INSERT INTO " + GameDaoDriverMan.TABLE_NAME
 				+ " (id, nome, descrizione, piattaforma, quantita, prezzo) VALUES (?, ?, ?, ?, ?, ?)";
 
 		try {
-			connection = ds.getConnection();
+			connection = DriverManagerConnectionPool.getConnection();
 			
 			preparedStatement = connection.prepareStatement(insertSQL);
 			preparedStatement.setString(1, game.getId());
@@ -60,8 +43,7 @@ private static final String TABLE_NAME = "gioco";
 				if (preparedStatement != null)
 					preparedStatement.close();
 			} finally {
-				if(connection != null)
-					connection.close();
+				DriverManagerConnectionPool.releaseConnection(connection);
 			}
 		}
 	}
@@ -73,17 +55,15 @@ private static final String TABLE_NAME = "gioco";
 		PreparedStatement preparedStatement = null;
 
 		try {
+			
+			String insertSQL = "INSERT INTO appartienegenere (gioco,genere) VALUES (?,?)";
+			connection = DriverManagerConnectionPool.getConnection();
+			preparedStatement = connection.prepareStatement(insertSQL);
+			
 			for(int i=0;i<genere.length;i++)
-			{
-				String insertSQL = "INSERT INTO appartienegenere (gioco,genere) VALUES (?,?)";
-
-				connection = ds.getConnection();
-				
-				preparedStatement = connection.prepareStatement(insertSQL);
-				
-				preparedStatement.setString(1, id);
+			{	
+				preparedStatement.setString(1, id); //questo può essere portato fuori dal for?
 				preparedStatement.setString(2, genere[i]);
-
 
 				preparedStatement.executeUpdate();
 
@@ -95,8 +75,7 @@ private static final String TABLE_NAME = "gioco";
 				if (preparedStatement != null)
 					preparedStatement.close();
 			} finally {
-				if(connection != null)
-					connection.close();
+				DriverManagerConnectionPool.releaseConnection(connection);
 			}
 		}
 	}
@@ -108,10 +87,10 @@ private static final String TABLE_NAME = "gioco";
 
 		int result = 0;
 
-		String deleteSQL = "DELETE FROM " + GameDaoDataSource.TABLE_NAME + " WHERE id = ?";
+		String deleteSQL = "DELETE FROM " + GameDaoDriverMan.TABLE_NAME + " WHERE id = ?";
 
 		try {
-			connection = ds.getConnection();
+			connection = DriverManagerConnectionPool.getConnection();
 			preparedStatement = connection.prepareStatement(deleteSQL);
 			preparedStatement.setString(1, id);
 
@@ -123,8 +102,7 @@ private static final String TABLE_NAME = "gioco";
 				if (preparedStatement != null)
 					preparedStatement.close();
 			} finally {
-				if(connection != null)
-					connection.close();
+				DriverManagerConnectionPool.releaseConnection(connection);
 			}
 		}
 		return (result != 0);
@@ -137,10 +115,10 @@ private static final String TABLE_NAME = "gioco";
 
 		Game item = new Game();
 
-		String selectSQL = "SELECT * FROM " + GameDaoDataSource.TABLE_NAME + " WHERE id = ?";
+		String selectSQL = "SELECT * FROM " + GameDaoDriverMan.TABLE_NAME + " WHERE id = ?";
 
 		try {
-			connection = ds.getConnection();
+			connection = DriverManagerConnectionPool.getConnection();
 			preparedStatement = connection.prepareStatement(selectSQL);
 			preparedStatement.setString(1, id);
 
@@ -160,8 +138,7 @@ private static final String TABLE_NAME = "gioco";
 				if (preparedStatement != null)
 					preparedStatement.close();
 			} finally {
-				if(connection != null)
-					connection.close();
+				DriverManagerConnectionPool.releaseConnection(connection);
 			}
 		}
 		return item;
@@ -176,11 +153,11 @@ private static final String TABLE_NAME = "gioco";
 		List<Game> model = new ArrayList<Game>();
 		
 		try {
-			connection = ds.getConnection();
+			connection = DriverManagerConnectionPool.getConnection();
 			
 			if(piattaforma.equals("tutto"))
 			{
-				String sql = "SELECT * FROM " + GameDaoDataSource.TABLE_NAME + " WHERE nome LIKE ?";
+				String sql = "SELECT * FROM " + GameDaoDriverMan.TABLE_NAME + " WHERE nome LIKE ?";
 				stmt = connection.prepareStatement(sql);
 				
 				stmt.setString(1, "%"+nome+"%");
@@ -189,7 +166,7 @@ private static final String TABLE_NAME = "gioco";
 			}
 			else
 			{
-				String sql = "SELECT * FROM " + GameDaoDataSource.TABLE_NAME + " WHERE nome LIKE ? AND piattaforma = ?";
+				String sql = "SELECT * FROM " + GameDaoDriverMan.TABLE_NAME + " WHERE nome LIKE ? AND piattaforma = ?";
 				stmt = connection.prepareStatement(sql);
 				
 				stmt.setString(1, "%"+nome+"%");
@@ -220,9 +197,7 @@ private static final String TABLE_NAME = "gioco";
 			} catch (SQLException sqlException) {
 				System.out.println(sqlException);
 			} finally {
-				if (connection != null) 
-					if(connection != null)
-						connection.close();
+				DriverManagerConnectionPool.releaseConnection(connection);
 			}
 		}
 		return model;
@@ -235,14 +210,14 @@ private static final String TABLE_NAME = "gioco";
 
 		Collection<Game> games = new LinkedList<Game>();
 
-		String selectSQL = "SELECT * FROM " + GameDaoDataSource.TABLE_NAME;
+		String selectSQL = "SELECT * FROM " + GameDaoDriverMan.TABLE_NAME;
 
 		if (order != null && !order.equals("")) {
 			selectSQL += " ORDER BY " + order;
 		}
 		
 		try {
-			connection = ds.getConnection();
+			connection = DriverManagerConnectionPool.getConnection();
 			preparedStatement = connection.prepareStatement(selectSQL);
 
 			ResultSet rs = preparedStatement.executeQuery();
@@ -265,8 +240,7 @@ private static final String TABLE_NAME = "gioco";
 				if (preparedStatement != null)
 					preparedStatement.close();
 			} finally {
-				if(connection != null)
-					connection.close();
+				DriverManagerConnectionPool.releaseConnection(connection);
 			}
 		}
 		return games;
@@ -277,10 +251,10 @@ private static final String TABLE_NAME = "gioco";
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		String deleteSQL = "UPDATE " + GameDaoDataSource.TABLE_NAME + " SET nome = ?, descrizione = ?, piattaforma = ?, quantita = ?, prezzo = ? WHERE id = ?";
+		String deleteSQL = "UPDATE " + GameDaoDriverMan.TABLE_NAME + " SET nome = ?, descrizione = ?, piattaforma = ?, quantita = ?, prezzo = ? WHERE id = ?";
 
 		try {
-			connection = ds.getConnection();
+			connection = DriverManagerConnectionPool.getConnection();
 			preparedStatement = connection.prepareStatement(deleteSQL);
 			preparedStatement.setString(1, game.getName());
 			preparedStatement.setString(2, game.getDesc());
@@ -297,8 +271,7 @@ private static final String TABLE_NAME = "gioco";
 				if (preparedStatement != null)
 					preparedStatement.close();
 			} finally {
-				if(connection != null)
-					connection.close();
+				DriverManagerConnectionPool.releaseConnection(connection);
 			}
 		}
 	}
