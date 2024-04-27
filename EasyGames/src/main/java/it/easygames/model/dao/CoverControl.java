@@ -9,6 +9,10 @@ import java.sql.SQLException;
 
 public class CoverControl {
 	
+	private CoverControl() {
+		
+	}
+	
 	public synchronized static byte[] load(String id) throws SQLException {
 
 		Connection connection = null;

@@ -29,7 +29,6 @@ public class GetCoverServlet extends HttpServlet {
 			try {
 				bt = CoverControl.load(id);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

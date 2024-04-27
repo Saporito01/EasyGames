@@ -24,7 +24,6 @@ if(model == null) {
 
 <h2 >I pi&ugrave; venduti</h2>
 
-<h2 class="align">I pi&ugrave; venduti</h2>
 <div class="list-item">
 <%
 	if(model != null && model.size() > 0) {
@@ -35,7 +34,7 @@ if(model == null) {
 
 <div class="item">
 <a href="./getGame?idHome=<%=item.getId()%>">
-<img src="./getCover?id=<%=item.getId()%>" width="381" height="218">
+<img src="./getCover?id=<%=item.getId()%>" width="381" height="218" alt="img">
 </a>
 <span class="title"><%=item.getName()%></span><span class="price"><%=String.format(java.util.Locale.US,"%.2f",item.getPrice())%>&euro;</span>
 </div>

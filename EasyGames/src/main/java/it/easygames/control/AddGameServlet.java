@@ -45,8 +45,6 @@ public class AddGameServlet extends HttpServlet {
 
 		try
 		{
-			//if (name != null && !name.equals("") && surname != null && !surname.equals("")) 
-			//{
 				Game model = new Game();
 				model.setId(id);
 				model.setName(nome);
@@ -56,7 +54,6 @@ public class AddGameServlet extends HttpServlet {
 				model.setPrice(Float.valueOf(prezzo));
 				
 				gameDAO.doSave(model);
-			//}
 			
 			gameDAO.doSaveGenere(id,genere);
 			
