@@ -21,12 +21,12 @@ import it.easygames.model.dao.IGameDao;
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
 maxFileSize = 1024 * 1024 * 10, // 10MB
 maxRequestSize = 1024 * 1024 * 50) // 50MB
-public class editGameServlet extends HttpServlet {
+public class EditGameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	static IGameDao gameDAO = new GameDaoDriverMan();
 	
-    public editGameServlet() {
+    public EditGameServlet() {
         super();
     }
 

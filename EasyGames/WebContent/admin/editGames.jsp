@@ -8,7 +8,7 @@ Game item = (Game) request.getAttribute("game");
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<link rel="icon" type="image/png" href="../images/logo_scheda.png"/>
+<link rel="icon" type="image/png" href="./images/logo_scheda.png"/>
 <meta charset="UTF-8">
 <title>Modifica gioco</title>
 </head>

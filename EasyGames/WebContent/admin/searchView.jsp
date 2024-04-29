@@ -18,7 +18,7 @@ Collection<?> model = (Collection<?>) request.getAttribute("gameSearch");
 			Game item = (Game)it.next();
 %>
 
-<a href="getGame?idAdmin=<%=item.getId()%>"><img src="getCover?id=<%=item.getId()%>" width="350" height="200">
+<a href="getGame?idAdmin=<%=item.getId()%>"><img src="getCover?id=<%=item.getId()%>" width="350" height="200" alt="copertina">
 <%=item.getName()%>
 </a>
 

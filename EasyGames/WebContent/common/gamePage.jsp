@@ -18,14 +18,14 @@ Game game = (Game) request.getAttribute("game");
 <div class="main">
 
 <div class="data">
-<div class="image"><img src="getCover?id=<%=game.getId()%>"></div>
+<div class="image"><img src="getCover?id=<%=game.getId()%>" alt="copertina"></div>
 <div class="panel">
 <h1><%=game.getName()%></h1>
 Prezzo: <%=String.format(java.util.Locale.US,"%.2f",game.getPrice())%>&euro;<br>
 Piattaforma: <%=game.getPlatf()%><br>
 Descrizione. <%=game.getDesc()%><br>
 <div class="buttons">
-<a href="CartServlet?id=<%=game.getId()%>"><button><img src="./images/carrello.png" width="35" height="35"></button></a>
+<a href="CartServlet?id=<%=game.getId()%>"><button><img src="./images/carrello.png" width="35" height="35" alt="carrello"></button></a>
 <button>Acquista ora</button>
 </div>
 

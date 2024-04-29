@@ -53,7 +53,7 @@ if(model == null) {
 %>
 
 <div class="item">
-<a href="../getGame?idAdmin=<%=item.getId()%>"><img src="../getCover?id=<%=item.getId()%>" width="381" height="218">
+<a href="../getGame?idAdmin=<%=item.getId()%>"><img src="../getCover?id=<%=item.getId()%>" width="381" height="218" alt="copertina">
 <span class="title"><%=item.getName()%></span>
 </a>
 </div>

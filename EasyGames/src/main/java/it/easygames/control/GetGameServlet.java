@@ -21,7 +21,7 @@ public class GetGameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	static IGameDao gameDAO = new GameDaoDriverMan();
-       
+	
     public GetGameServlet() {
         super();
     }
