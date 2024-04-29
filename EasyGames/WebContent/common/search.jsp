@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="java.util.*, it.easygames.model.bean.Game"%>
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="images/logo_scheda.png"/>
@@ -24,7 +24,7 @@
 
 <div class="item">
 <a href="getGame?idHome=<%=item.getId()%>">
-<img src="getCover?id=<%=item.getId()%>" width="381" height="218">
+<img src="getCover?id=<%=item.getId()%>" width="381" height="218" alt="copertina">
 </a>
 <span class="title"><%=item.getName()%></span><span class="price"><%=item.getPrice()%>&#8364</span>
 </div>

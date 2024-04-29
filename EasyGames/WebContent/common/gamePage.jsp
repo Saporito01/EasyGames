@@ -6,7 +6,7 @@ Game game = (Game) request.getAttribute("game");
 %>
     
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
 <meta charset="UTF-8">
 <title><%=game.getName()%></title>

@@ -10,7 +10,7 @@ if(model == null) {
 %>
 
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="./images/logo_scheda.png"/>
@@ -34,7 +34,7 @@ if(model == null) {
 
 <div class="item">
 <a href="./getGame?idHome=<%=item.getId()%>">
-<img src="./getCover?id=<%=item.getId()%>" width="381" height="218" alt="img">
+<img src="./getCover?id=<%=item.getId()%>" width="381" height="218" alt="copertina">
 </a>
 <span class="title"><%=item.getName()%></span><span class="price"><%=String.format(java.util.Locale.US,"%.2f",item.getPrice())%>&euro;</span>
 </div>
