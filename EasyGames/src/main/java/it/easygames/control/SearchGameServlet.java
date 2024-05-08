@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
 
 import it.easygames.model.bean.Game;
-import it.easygames.model.dao.GameDaoDriverMan;
+import it.easygames.model.dao.GameDao;
 import it.easygames.model.dao.IGameDao;
 
 
@@ -20,7 +20,7 @@ import it.easygames.model.dao.IGameDao;
 public class SearchGameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	static IGameDao gameDAO = new GameDaoDriverMan();
+	static IGameDao gameDAO = new GameDao();
        
     public SearchGameServlet() {
         super();

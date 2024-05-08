@@ -13,7 +13,7 @@ public class CoverControl {
 		
 	}
 	
-	public synchronized static byte[] load(String id) throws SQLException {
+	static public synchronized byte[] load(String id) throws SQLException {
 
 		Connection connection = null;
 		PreparedStatement stmt = null;
@@ -49,7 +49,7 @@ public class CoverControl {
 		return bt;
 	}
 	
-	public synchronized static void updateCover(String id, InputStream cover) 
+	static public synchronized void updateCover(String id, InputStream cover) 
 			throws SQLException {
 		Connection connection = null;
 		PreparedStatement stmt = null;

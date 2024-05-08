@@ -12,7 +12,7 @@ public class DriverManagerConnectionPool  {
 		
 	}
 
-	private static List<Connection> freeDbConnections;
+	static private List<Connection> freeDbConnections;
 
 	static {
 		freeDbConnections = new LinkedList<Connection>();
@@ -23,7 +23,7 @@ public class DriverManagerConnectionPool  {
 		} 
 	}
 	
-	private static synchronized Connection createDBConnection() throws SQLException {
+	static private synchronized Connection createDBConnection() throws SQLException {
 		Connection newConnection = null;
 		String ip = "localhost";
 		String port = "3306";
@@ -38,7 +38,7 @@ public class DriverManagerConnectionPool  {
 	}
 
 
-	public static synchronized Connection getConnection() throws SQLException {
+	static public synchronized Connection getConnection() throws SQLException {
 		Connection connection;
 
 		if (!freeDbConnections.isEmpty()) {
@@ -59,7 +59,7 @@ public class DriverManagerConnectionPool  {
 		return connection;
 	}
 
-	public static synchronized void releaseConnection(Connection connection) {
+	static public synchronized void releaseConnection(Connection connection) {
 		if(connection != null) freeDbConnections.add(connection);
 	}
 }

@@ -45,7 +45,7 @@ CREATE TABLE ordine
 	ora time NOT NULL,
 	account varchar(30) NOT NULL,
 	PRIMARY KEY(codice),
-	FOREIGN KEY(account) REFERENCES cliente(account) ON UPDATE cascade ON DELETE cascade
+	FOREIGN KEY(account) REFERENCES account(nickname) ON UPDATE cascade ON DELETE cascade
 )AUTO_INCREMENT=1;
 
 CREATE TABLE giochi_acquistati
@@ -81,8 +81,13 @@ CREATE TABLE contiene
 (
 	carrello varchar(30) NOT NULL,
 	gioco char(3) NOT NULL,
-	quantità int NOT NULL,
+	quantita int NOT NULL,
 	PRIMARY KEY(carrello,gioco),
 	FOREIGN KEY(carrello) REFERENCES carrello(account) ON UPDATE cascade ON DELETE cascade,
 	FOREIGN KEY(gioco) REFERENCES gioco(id) ON UPDATE cascade ON DELETE cascade
 );
+
+INSERT INTO genere(genere) VALUES('arcade'),('avventura'),('azione'),('giocatore singolo'),('corse'),('sport'),('multiplayer'),('picchiaduro'),('simulazione'),('strategia'),('fps'),('rpg');
+INSERT INTO account (nickname, nome, cognome, data_nascita, email, password) VALUES ('Admin01','Francesco','Saporito','2001-08-11','saporitofrancesco01@gmail.com',SHA2('Cavaliere1!',512));
+INSERT INTO amministratore (account) VALUES ('Admin01');
+INSERT INTO carrello (account) VALUES ('Admin01');

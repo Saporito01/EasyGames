@@ -13,7 +13,7 @@ import javax.servlet.http.Part;
 
 import it.easygames.model.bean.Game;
 import it.easygames.model.dao.CoverControl;
-import it.easygames.model.dao.GameDaoDriverMan;
+import it.easygames.model.dao.GameDao;
 import it.easygames.model.dao.IGameDao;
 
 
@@ -24,7 +24,7 @@ maxRequestSize = 1024 * 1024 * 50) // 50MB
 public class AddGameServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	static IGameDao gameDAO = new GameDaoDriverMan();
+	static IGameDao gameDAO = new GameDao();
 
     public AddGameServlet() {
         super();

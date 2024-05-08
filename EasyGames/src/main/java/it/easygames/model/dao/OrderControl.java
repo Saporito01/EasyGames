@@ -11,7 +11,12 @@ import java.util.ArrayList;
 import it.easygames.model.bean.Ordine;
 
 public class OrderControl {
-	public synchronized static Collection<Ordine> load() throws SQLException {
+	
+	private OrderControl() {
+		
+	}
+	
+	static public synchronized Collection<Ordine> load() throws SQLException {
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -55,7 +60,8 @@ public class OrderControl {
 	}
 	
 	
-	public synchronized static ArrayList<String> loadOrderAccount() throws SQLException {
+	static public synchronized ArrayList<String> loadOrderAccount() throws SQLException {
+		//valutare la rimozione di questo metodo, posso recuperare la stessa informazione tramite un metodo del dao per gli account
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -91,7 +97,7 @@ public class OrderControl {
 	}
 	
 	
-	public synchronized static void doSave(Ordine ordine) throws SQLException {
+	static public synchronized void doSave(Ordine ordine) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
@@ -119,7 +125,7 @@ public class OrderControl {
 	}
 	
 	
-	public synchronized static Collection<Ordine> doRetrieveByDate(String data1, String data2, String account) throws SQLException {
+	static public synchronized Collection<Ordine> doRetrieveByDate(String data1, String data2, String account) throws SQLException {
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;

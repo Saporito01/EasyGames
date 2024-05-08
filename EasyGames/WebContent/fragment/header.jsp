@@ -4,6 +4,16 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function () {
+	  $(".action").on("click", function () {
+	    $(".menu").toggleClass("active");
+	  });
+	});
+</script>
+
 </head>
 <body>
 <header>
@@ -34,9 +44,46 @@
 <a href="CartServlet"><img src="images/carrello.png" width="35" height="35" alt="Carrello"></a>
 </div>
 
-<div>
-<a href=""><img src="images/profilo.png" width="35" height="35" alt="Carrello"></a>
-</div>
+<%
+	String accountName = (String) request.getSession().getAttribute("accountName");
+	String logPath;
+	String log;
+	if(accountName == null)
+	{
+		accountName = "Ospite";
+		logPath = "./login.jsp";
+		log = "Log In";
+	}
+	else
+	{
+		logPath = request.getContextPath() + "/common/Logout";
+		log = "Log Out";
+	}
+%>
+
+ <div class="profile-menu">
+      <div class="action">
+		<img src="images/profilo.png" width="55" height="55" alt="Account">
+      </div>
+      <div class="menu">
+        <div class="profile">
+          <div class="info">
+            <h2><%= accountName %></h2>
+          </div>
+        </div>
+        <ul>
+          <li>
+            <a href="#">Account</a>
+          </li>
+          <li>
+            <a href="#">Ordini</a>
+          </li>
+          <li>
+            <a href="<%= logPath %>"><%= log %></a>
+          </li>
+        </ul>
+      </div>
+    </div>
 
 </header>
 </body>

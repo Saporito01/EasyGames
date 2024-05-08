@@ -11,7 +11,7 @@ import java.util.List;
 
 import it.easygames.model.bean.Game;
 
-public class GameDaoDriverMan implements IGameDao{
+public class GameDao implements IGameDao{
 	
 private static final String TABLE_NAME = "gioco";
 	
@@ -21,7 +21,7 @@ private static final String TABLE_NAME = "gioco";
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		String insertSQL = "INSERT INTO " + GameDaoDriverMan.TABLE_NAME
+		String insertSQL = "INSERT INTO " + GameDao.TABLE_NAME
 				+ " (id, nome, descrizione, piattaforma, quantita, prezzo) VALUES (?, ?, ?, ?, ?, ?)";
 
 		try {
@@ -87,7 +87,7 @@ private static final String TABLE_NAME = "gioco";
 
 		int result = 0;
 
-		String deleteSQL = "DELETE FROM " + GameDaoDriverMan.TABLE_NAME + " WHERE id = ?";
+		String deleteSQL = "DELETE FROM " + GameDao.TABLE_NAME + " WHERE id = ?";
 
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
@@ -115,7 +115,7 @@ private static final String TABLE_NAME = "gioco";
 
 		Game item = new Game();
 
-		String selectSQL = "SELECT * FROM " + GameDaoDriverMan.TABLE_NAME + " WHERE id = ?";
+		String selectSQL = "SELECT * FROM " + GameDao.TABLE_NAME + " WHERE id = ?";
 
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
@@ -157,7 +157,7 @@ private static final String TABLE_NAME = "gioco";
 			
 			if(piattaforma.equals("tutto"))
 			{
-				String sql = "SELECT * FROM " + GameDaoDriverMan.TABLE_NAME + " WHERE nome LIKE ?";
+				String sql = "SELECT * FROM " + GameDao.TABLE_NAME + " WHERE nome LIKE ?";
 				stmt = connection.prepareStatement(sql);
 				
 				stmt.setString(1, "%"+nome+"%");
@@ -166,7 +166,7 @@ private static final String TABLE_NAME = "gioco";
 			}
 			else
 			{
-				String sql = "SELECT * FROM " + GameDaoDriverMan.TABLE_NAME + " WHERE nome LIKE ? AND piattaforma = ?";
+				String sql = "SELECT * FROM " + GameDao.TABLE_NAME + " WHERE nome LIKE ? AND piattaforma = ?";
 				stmt = connection.prepareStatement(sql);
 				
 				stmt.setString(1, "%"+nome+"%");
@@ -210,7 +210,7 @@ private static final String TABLE_NAME = "gioco";
 
 		Collection<Game> games = new LinkedList<Game>();
 
-		String selectSQL = "SELECT * FROM " + GameDaoDriverMan.TABLE_NAME;
+		String selectSQL = "SELECT * FROM " + GameDao.TABLE_NAME;
 
 		if (order != null && !order.equals("")) {
 			selectSQL += " ORDER BY " + order;
@@ -251,7 +251,7 @@ private static final String TABLE_NAME = "gioco";
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		String deleteSQL = "UPDATE " + GameDaoDriverMan.TABLE_NAME + " SET nome = ?, descrizione = ?, piattaforma = ?, quantita = ?, prezzo = ? WHERE id = ?";
+		String deleteSQL = "UPDATE " + GameDao.TABLE_NAME + " SET nome = ?, descrizione = ?, piattaforma = ?, quantita = ?, prezzo = ? WHERE id = ?";
 
 		try {
 			connection = DriverManagerConnectionPool.getConnection();
