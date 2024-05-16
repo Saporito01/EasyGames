@@ -1,30 +1,46 @@
 package it.easygames.model.bean;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Cart {
 
-	private List<Game> products;
-	
-	public Cart() {
-		products = new ArrayList<Game>();
-	}
-	
-	public void addProduct(Game product) {
-		products.add(product);
-	}
-	
-	public void deleteProduct(Game product) {
-		for(Game prod : products) {
-			if((prod.getId()).equalsIgnoreCase(product.getId())) {
-				products.remove(prod);
-				break;
-			}
-		}
- 	}
-	
-	public List<Game> getProducts() {
-		return  products;
-	}
+	private String userId;
+    private Map<String, Integer> products;
+
+    public Cart(String userId) {
+        this.userId = userId;
+        this.products = new HashMap<>();
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void addProduct(String productId) {
+        products.put(productId, products.getOrDefault(productId, 0) + 1);
+    }
+
+    public void removeProduct(String productId) {
+        if (products.containsKey(productId)) {
+            int quantity = products.get(productId);
+            if (quantity > 1) {
+                products.put(productId, quantity - 1);
+            } else {
+                products.remove(productId);
+            }
+        }
+    }
+
+    public Map<String, Integer> getProducts() {
+        return products;
+    }
+
+    public void clear() {
+        products.clear();
+    }
 }

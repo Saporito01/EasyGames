@@ -25,7 +25,7 @@ Prezzo: <%=String.format(java.util.Locale.US,"%.2f",game.getPrice())%>&euro;<br>
 Piattaforma: <%=game.getPlatf()%><br>
 Descrizione. <%=game.getDesc()%><br>
 <div class="buttons">
-<a href="CartServlet?id=<%=game.getId()%>"><button><img src="./images/carrello.png" width="35" height="35" alt="carrello"></button></a>
+<a href="CartServlet?id=<%=game.getId()%>&azione=aggiungi"><button><img src="./images/carrello.png" width="35" height="35" alt="carrello"></button></a>
 <button>Acquista ora</button>
 </div>
 

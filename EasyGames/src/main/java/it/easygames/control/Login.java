@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import it.easygames.model.bean.Account;
 import it.easygames.model.bean.Cart;
-import it.easygames.model.bean.Game;
 import it.easygames.model.dao.AccountControl;
 import it.easygames.model.dao.CartControl;
 import it.easygames.model.dao.GameDao;
@@ -70,15 +69,17 @@ public class Login extends HttpServlet {
         				request.getSession().setAttribute("accountName", adminAccount.getNickname());
         				
         				
-        				//salvataggio del carrello nel db (nel caso sia presente un carrello nella sessione)
+        				//sincronizzazione dei due carrelli (quello in sessione e quello nel database)
         	    		Cart cart = (Cart) request.getSession().getAttribute("cart");
-        	    		if(cart != null)
-        	    		{
-        	    			List<Game> prodcart = cart.getProducts();
-            	    		for(Game beancart : prodcart)
-            	    			CartControl.addGame(adminAccount.getNickname(),beancart.getId());
+        	    		if(cart == null) {
+        	    			cart = new Cart((String)request.getSession().getAttribute("accountName"));
+        	    			request.getSession().setAttribute("cart", cart);
         	    		}
-        				
+        	    		cart.setUserId((String)request.getSession().getAttribute("accountName"));
+    	    			Collection<String> gameId = CartControl.getCartGames(cart.getUserId());
+    	    			for(String id : gameId)
+    	    				cart.addProduct(id);
+    	    			CartControl.updateCart(cart);
         	    		
         				response.sendRedirect("admin/gestione.jsp");
         				return;
@@ -97,15 +98,17 @@ public class Login extends HttpServlet {
         	    		request.getSession().setAttribute("accountName", userAccount.getNickname());
         	    		
         	    		
-        	    		//salvataggio del carrello nel db
+        	    		//sincronizzazione dei due carrelli (quello in sessione e quello nel database)
         	    		Cart cart = (Cart) request.getSession().getAttribute("cart");
-        	    		if(cart != null)
-        	    		{
-        	    			List<Game> prodcart = cart.getProducts();
-            	    		for(Game beancart : prodcart)
-            	    			CartControl.addGame(userAccount.getNickname(),beancart.getId());
+        	    		if(cart == null) {
+        	    			cart = new Cart((String)request.getSession().getAttribute("accountName"));
+        	    			request.getSession().setAttribute("cart", cart);
         	    		}
-        	    		
+        	    		cart.setUserId((String)request.getSession().getAttribute("accountName"));
+    	    			Collection<String> gameId = CartControl.getCartGames(cart.getUserId());
+    	    			for(String id : gameId)
+    	    				cart.addProduct(id);
+    	    			CartControl.updateCart(cart);
         	    		
         	    		response.sendRedirect("/EasyGames/");
         	    		return;
@@ -123,7 +126,7 @@ public class Login extends HttpServlet {
 			System.out.println("Error:" + e.getMessage());
 		}
 	}
-
+	
 	private String toHash(String password) {
         String hashString = null;
         try {
