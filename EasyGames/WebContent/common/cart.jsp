@@ -12,6 +12,11 @@
 <title>Carrello</title>
 </head>
 <body>
+
+<header>
+<a href="/EasyGames/"><img src="./images/logo.png" width="290" height="65" alt="Logo"></a>
+</header>
+
 <% if(cart != null) { %>
 		<h2>Cart</h2>
 		<table border="1">
@@ -29,10 +34,15 @@
 		<tr>
 			<td><%=game.getName()%></td>
 			<td><a href="./CartServlet?azione=rimuovi&id=<%=id%>">-</a><%=prodCart.get(id)%><a href="./CartServlet?azione=aggiungi&id=<%=id%>">+</a></td>
-			<td><a href="">ELIMINA</a></td>
+			<td><a href="./CartServlet?azione=elimina&id=<%=id%>">ELIMINA</a></td>
 		</tr>
 		<% } %>
-	</table>		
-	<% } %>	
+	</table>
+	<% } %>
+	
+	<%if(cart != null && !cart.getProducts().isEmpty()){%>
+	<a href="./common/order.jsp"><button>COMPLETA ORDINE</button></a>
+	<% } %>
+	
 </body>
 </html>

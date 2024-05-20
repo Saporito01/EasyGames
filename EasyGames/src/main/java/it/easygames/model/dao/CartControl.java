@@ -32,6 +32,9 @@ public class CartControl {
 				preparedStatement2.executeUpdate();
 				connection.commit();
 				
+				if(products.isEmpty())
+					return;
+				
 				for(String id : gameId) {
 					preparedStatement = connection.prepareStatement(insertSQL);
 					preparedStatement.setString(1, userId);

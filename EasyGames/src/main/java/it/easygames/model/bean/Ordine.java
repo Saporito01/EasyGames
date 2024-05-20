@@ -2,8 +2,6 @@ package it.easygames.model.bean;
 
 public class Ordine {
 	
-	
-	
 	public Ordine() {
 		this.codice = 0;
 		this.data = "";

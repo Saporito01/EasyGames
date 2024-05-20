@@ -35,7 +35,11 @@ public class Cart {
             }
         }
     }
-
+    
+    public void removeCompletelyProduct(String productId) {
+    	products.remove(productId);
+    }
+    
     public Map<String, Integer> getProducts() {
         return products;
     }

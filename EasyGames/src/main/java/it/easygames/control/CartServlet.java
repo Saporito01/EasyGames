@@ -50,6 +50,8 @@ public class CartServlet extends HttpServlet {
                 cart.addProduct(gameId);
             else if(azione.equals("rimuovi"))
                 cart.removeProduct(gameId);
+            else if(azione.equals("elimina"))
+            	cart.removeCompletelyProduct(gameId);
         }
         
         try {
