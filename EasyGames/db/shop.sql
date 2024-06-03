@@ -52,6 +52,7 @@ CREATE TABLE giochi_acquistati
 (
 	gioco char(3) NOT NULL,
 	ordine int NOT NULL,
+	quantita int NOT NULL,
 	PRIMARY KEY(gioco,ordine),
 	FOREIGN KEY(gioco) REFERENCES gioco(id) ON UPDATE cascade ON DELETE cascade,
 	FOREIGN KEY(ordine) REFERENCES ordine(codice) ON UPDATE cascade ON DELETE cascade

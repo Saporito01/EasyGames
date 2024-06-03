@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
 
 import it.easygames.model.bean.Ordine;
@@ -20,16 +21,74 @@ public class OrderControl {
 	static public synchronized Collection<Ordine> load() throws SQLException {
 
 		Connection connection = null;
-		PreparedStatement preparedStatement = null;
+		PreparedStatement stmt1 = null;
+		PreparedStatement stmt2 = null;
 		
 		Collection<Ordine> ordini = new LinkedList<Ordine>();
 
-		String selectSQL = "SELECT * FROM ordine ORDER BY codice";
+		String select1 = "SELECT * FROM ordine;";
+		String select2 = "SELECT gioco, quantita FROM giochi_acquistati WHERE ordine = ?";
 
 		try
 		{
 			connection = DriverManagerConnectionPool.getConnection();
+			stmt1 = connection.prepareStatement(select1);
+			
+			ResultSet rs = stmt1.executeQuery();
+			
+			while(rs.next()) {
+				Ordine ordine = new Ordine();
+				
+				ordine.setCodice(rs.getInt("codice"));
+				ordine.setData(rs.getString("data"));
+				ordine.setOra(rs.getString("ora"));
+				ordine.setAccount(rs.getString("account"));
+				
+				stmt2 = connection.prepareStatement(select2);
+				stmt2.setInt(1, ordine.getCodice());
+				ResultSet rs2 = stmt2.executeQuery();
+				while(rs2.next())
+					ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
+				
+				ordini.add(ordine);
+			}
+		}
+		finally
+		{
+			try
+			{
+				if (stmt1 != null)
+					stmt1.close();
+				if (stmt2 != null)
+					stmt2.close();
+			}
+			finally
+			{
+				DriverManagerConnectionPool.releaseConnection(connection);
+			}
+		}
+		
+		return ordini;
+	}
+	
+	static public synchronized Collection<Ordine> loadForUser(String user) throws SQLException {
+
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		PreparedStatement stmt2 = null;
+		
+		Collection<Ordine> ordini = new LinkedList<Ordine>();
+
+		//prende tutti gli ordini dell'ultimo mese di un determinato utente
+		String selectSQL = "SELECT * FROM ordine WHERE account = ? AND data >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) ORDER BY data";
+
+		String select2 = "SELECT gioco, quantita FROM giochi_acquistati WHERE ordine = ?";
+		
+		try
+		{
+			connection = DriverManagerConnectionPool.getConnection();
 			preparedStatement = connection.prepareStatement(selectSQL);
+			preparedStatement.setString(1, user);
 			
 			ResultSet rs = preparedStatement.executeQuery();
 			
@@ -41,6 +100,12 @@ public class OrderControl {
 				ordine.setOra(rs.getString("ora"));
 				ordine.setAccount(rs.getString("account"));
 				
+				stmt2 = connection.prepareStatement(select2);
+				stmt2.setInt(1, ordine.getCodice());
+				ResultSet rs2 = stmt2.executeQuery();
+				while(rs2.next())
+					ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
+				
 				ordini.add(ordine);
 			}
 		}
@@ -50,6 +115,8 @@ public class OrderControl {
 			{
 				if (preparedStatement != null)
 					preparedStatement.close();
+				if (stmt2 != null)
+					stmt2.close();
 			}
 			finally
 			{
@@ -59,7 +126,6 @@ public class OrderControl {
 		
 		return ordini;
 	}
-	
 	
 	static public synchronized ArrayList<String> loadOrderAccount() throws SQLException {
 		//valutare la rimozione di questo metodo, posso recuperare la stessa informazione tramite un metodo del dao per gli account
@@ -98,11 +164,13 @@ public class OrderControl {
 	}
 	
 	
-	static public synchronized void doSave(Ordine ordine, List<String> gameId) throws SQLException {
+	static public synchronized void doSave(Ordine ordine) throws SQLException {
 		Connection connection = null;
 		PreparedStatement stmt1 = null;
 		PreparedStatement stmt2 = null;
 		PreparedStatement stmt3 = null;
+		Map<String,Integer> products = ordine.getProducts();
+		List<String> gameId = new ArrayList<>(products.keySet());
 
 		try {
 			connection =DriverManagerConnectionPool.getConnection();
@@ -128,11 +196,12 @@ public class OrderControl {
 	            throw new SQLException("Errore nel recupero del codice ordine.");
 	        }
 			
-			String insert2 = "INSERT INTO giochi_acquistati (gioco, ordine) VALUES (?, ?)";
+			String insert2 = "INSERT INTO giochi_acquistati (gioco, ordine, quantita) VALUES (?, ?, ?)";
 			stmt3 = connection.prepareStatement(insert2);
 			for(String id : gameId) {
 				stmt3.setString(1, id);
 				stmt3.setInt(2, codice);
+				stmt3.setInt(3, products.get(id));
 				stmt3.executeUpdate();
 			}
 			
@@ -156,9 +225,10 @@ public class OrderControl {
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
+		PreparedStatement stmt2 = null;
+		String select2 = "SELECT gioco, quantita FROM giochi_acquistati WHERE ordine = ?";
 		
 		Collection<Ordine> ordini = new LinkedList<Ordine>();
-
 
 		try
 		{
@@ -181,12 +251,18 @@ public class OrderControl {
 					ordine.setOra(rs.getString("ora"));
 					ordine.setAccount(rs.getString("account"));
 					
+					stmt2 = connection.prepareStatement(select2);
+					stmt2.setInt(1, ordine.getCodice());
+					ResultSet rs2 = stmt2.executeQuery();
+					while(rs2.next())
+						ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
+					
 					ordini.add(ordine);
 				}
 			}
 			else if(!data1.equalsIgnoreCase("") && data2.equalsIgnoreCase("") && account.equalsIgnoreCase("tutto"))
 			{
-				String selectSQL = "SELECT * FROM ordine WHERE data > ?";
+				String selectSQL = "SELECT * FROM ordine WHERE data >= ?";
 				connection = DriverManagerConnectionPool.getConnection();
 				preparedStatement = connection.prepareStatement(selectSQL);
 				
@@ -202,12 +278,18 @@ public class OrderControl {
 					ordine.setOra(rs.getString("ora"));
 					ordine.setAccount(rs.getString("account"));
 					
+					stmt2 = connection.prepareStatement(select2);
+					stmt2.setInt(1, ordine.getCodice());
+					ResultSet rs2 = stmt2.executeQuery();
+					while(rs2.next())
+						ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
+					
 					ordini.add(ordine);
 				}
 			}
 			else if(data1.equalsIgnoreCase("") && !data2.equalsIgnoreCase("") && account.equalsIgnoreCase("tutto"))
 			{
-				String selectSQL = "SELECT * FROM ordine WHERE data < ?";
+				String selectSQL = "SELECT * FROM ordine WHERE data <= ?";
 				connection = DriverManagerConnectionPool.getConnection();
 				preparedStatement = connection.prepareStatement(selectSQL);
 				
@@ -222,6 +304,12 @@ public class OrderControl {
 					ordine.setData(rs.getString("data"));
 					ordine.setOra(rs.getString("ora"));
 					ordine.setAccount(rs.getString("account"));
+					
+					stmt2 = connection.prepareStatement(select2);
+					stmt2.setInt(1, ordine.getCodice());
+					ResultSet rs2 = stmt2.executeQuery();
+					while(rs2.next())
+						ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
 					
 					ordini.add(ordine);
 				}
@@ -244,6 +332,12 @@ public class OrderControl {
 					ordine.setOra(rs.getString("ora"));
 					ordine.setAccount(rs.getString("account"));
 					
+					stmt2 = connection.prepareStatement(select2);
+					stmt2.setInt(1, ordine.getCodice());
+					ResultSet rs2 = stmt2.executeQuery();
+					while(rs2.next())
+						ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
+					
 					ordini.add(ordine);
 				}
 			}
@@ -263,12 +357,18 @@ public class OrderControl {
 					ordine.setOra(rs.getString("ora"));
 					ordine.setAccount(rs.getString("account"));
 					
+					stmt2 = connection.prepareStatement(select2);
+					stmt2.setInt(1, ordine.getCodice());
+					ResultSet rs2 = stmt2.executeQuery();
+					while(rs2.next())
+						ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
+					
 					ordini.add(ordine);
 				}
 			}
 			else if(!data1.equalsIgnoreCase("") && data2.equalsIgnoreCase("") && !account.equalsIgnoreCase("tutto"))
 			{
-				String selectSQL = "SELECT * FROM ordine WHERE data > ? AND account = ?";
+				String selectSQL = "SELECT * FROM ordine WHERE data >= ? AND account = ?";
 				connection = DriverManagerConnectionPool.getConnection();
 				preparedStatement = connection.prepareStatement(selectSQL);
 				
@@ -285,12 +385,18 @@ public class OrderControl {
 					ordine.setOra(rs.getString("ora"));
 					ordine.setAccount(rs.getString("account"));
 					
+					stmt2 = connection.prepareStatement(select2);
+					stmt2.setInt(1, ordine.getCodice());
+					ResultSet rs2 = stmt2.executeQuery();
+					while(rs2.next())
+						ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
+					
 					ordini.add(ordine);
 				}
 			}
 			else if(data1.equalsIgnoreCase("") && !data2.equalsIgnoreCase("") && !account.equalsIgnoreCase("tutto"))
 			{
-				String selectSQL = "SELECT * FROM ordine WHERE data < ? AND account = ?";
+				String selectSQL = "SELECT * FROM ordine WHERE data <= ? AND account = ?";
 				connection = DriverManagerConnectionPool.getConnection();
 				preparedStatement = connection.prepareStatement(selectSQL);
 				
@@ -306,6 +412,12 @@ public class OrderControl {
 					ordine.setData(rs.getString("data"));
 					ordine.setOra(rs.getString("ora"));
 					ordine.setAccount(rs.getString("account"));
+					
+					stmt2 = connection.prepareStatement(select2);
+					stmt2.setInt(1, ordine.getCodice());
+					ResultSet rs2 = stmt2.executeQuery();
+					while(rs2.next())
+						ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
 					
 					ordini.add(ordine);
 				}
@@ -330,6 +442,12 @@ public class OrderControl {
 					ordine.setOra(rs.getString("ora"));
 					ordine.setAccount(rs.getString("account"));
 					
+					stmt2 = connection.prepareStatement(select2);
+					stmt2.setInt(1, ordine.getCodice());
+					ResultSet rs2 = stmt2.executeQuery();
+					while(rs2.next())
+						ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
+					
 					ordini.add(ordine);
 				}
 			}
@@ -340,6 +458,8 @@ public class OrderControl {
 			{
 				if (preparedStatement != null)
 					preparedStatement.close();
+				if (stmt2 != null)
+					stmt2.close();
 			}
 			finally
 			{

@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="images/logo_scheda.png"/>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
 <title>Risultati</title>
 </head>
 <body>
@@ -13,7 +14,7 @@
 
 <div id="main">
 <h2 class="align">Risultati</h2>
-<div class="list-item">
+<div class="list_item">
 <%
 	Collection<?> model = (Collection<?>) request.getAttribute("gameSearch");
 	if(model != null && model.size() > 0) {
@@ -26,7 +27,7 @@
 <a href="getGame?idHome=<%=item.getId()%>">
 <img src="getCover?id=<%=item.getId()%>" width="381" height="218" alt="copertina">
 </a>
-<span class="title"><%=item.getName()%></span><span class="price"><%=item.getPrice()%>&#8364</span>
+<span class="title"><%=item.getName()%></span><span class="price"><%=String.format(java.util.Locale.US,"%.2f",item.getPrice())%>&euro;</span>
 </div>
 
 <%

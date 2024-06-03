@@ -9,6 +9,8 @@ Game game = (Game) request.getAttribute("game");
 <html lang="it">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/png" href="./images/logo_scheda.png"/>
+<link rel="stylesheet" type="text/css" href="css/gamePage_style.css"/>
 <title><%=game.getName()%></title>
 </head>
 <body>
@@ -17,19 +19,18 @@ Game game = (Game) request.getAttribute("game");
 
 <div class="main">
 
-<div class="data">
 <div class="image"><img src="getCover?id=<%=game.getId()%>" alt="copertina"></div>
+
 <div class="panel">
-<h1><%=game.getName()%></h1>
-Prezzo: <%=String.format(java.util.Locale.US,"%.2f",game.getPrice())%>&euro;<br>
-Piattaforma: <%=game.getPlatf()%><br>
-Descrizione. <%=game.getDesc()%><br>
-<div class="buttons">
-<a href="CartServlet?id=<%=game.getId()%>&azione=aggiungi"><button><img src="./images/carrello.png" width="35" height="35" alt="carrello"></button></a>
-<button>Acquista ora</button>
+<h1><%=game.getName()%></h1><%=game.getPlatf()%>
+
+<div id="container-button">
+<div class="cart-button"><a href="CartServlet?id=<%=game.getId()%>&azione=aggiungi"><button><img src="./images/carrello.png" width="35" height="35" alt="carrello"></button></a></div>
+<div class="price"><%=String.format(java.util.Locale.US,"%.2f",game.getPrice())%>&euro;</div>
 </div>
 
-</div>
+<div class="description"><%=game.getDesc()%></div>
+
 </div>
 
 </div>

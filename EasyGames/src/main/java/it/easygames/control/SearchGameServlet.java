@@ -34,7 +34,11 @@ public class SearchGameServlet extends HttpServlet {
 		try {
 			RequestDispatcher dispatcher;
 			
-			if(nome != null)
+			if(piattaforma.equals("tutto") && nome.equals(""))
+			{
+				dispatcher = getServletContext().getRequestDispatcher("/common/home_page.jsp");
+			}
+			else if(nome != null)
 			{
 				Collection<Game> gameList = gameDAO.searchBarGame(nome, piattaforma);
 				

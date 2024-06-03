@@ -30,10 +30,19 @@ public class GetGameServlet extends HttpServlet {
 		
 		String idGameAdmin = (String) request.getParameter("idAdmin");
 		String idGameHome = (String) request.getParameter("idHome");
+		String genere = (String) request.getParameter("genere");
 
 		try
 		{
-			if(idGameHome != null)
+			if(genere != null)
+			{
+				Collection<Game> games = gameDAO.getForGenere(genere);
+				request.setAttribute("gameSearch", games);
+				
+				RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/common/search.jsp");
+				dispatcher.forward(request, response);
+			}
+			else if(idGameHome != null)
 			{
 				Game game = gameDAO.doRetrieveByKey(idGameHome);
 				request.setAttribute("game", game);
@@ -51,7 +60,7 @@ public class GetGameServlet extends HttpServlet {
 			}
 			else 
 			{
-				Collection<Game> games = gameDAO.doRetrieveAll("nome");
+				Collection<Game> games = gameDAO.getToHomePage();
 				request.setAttribute("games", games);
 
 				RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/common/home_page.jsp");

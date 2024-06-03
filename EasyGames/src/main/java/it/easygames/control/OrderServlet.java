@@ -53,9 +53,11 @@ public class OrderServlet extends HttpServlet {
         ordine.setAccount(user);
         ordine.setData(formattedDate);
         ordine.setOra(formattedTime);
+        for(String id : gameId)
+        	ordine.addProduct(id, products.get(id));
         
         try {
-			OrderControl.doSave(ordine, gameId);
+			OrderControl.doSave(ordine);
 			cart.clear();
 			CartControl.updateCart(cart);
 		} catch (SQLException e) {

@@ -276,4 +276,75 @@ private static final String TABLE_NAME = "gioco";
 		}
 	}
 	
+	public synchronized Collection<Game> getToHomePage() throws SQLException{
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		Collection<Game> games = new LinkedList<Game>();
+
+		String selectSQL = "SELECT gioco.* FROM gioco JOIN (SELECT gioco FROM giochi_acquistati GROUP BY gioco ORDER BY COUNT(*) DESC LIMIT 9) giochi_acquistati ON gioco.id = giochi_acquistati.gioco;";
+		
+		try {
+			connection = DriverManagerConnectionPool.getConnection();
+			preparedStatement = connection.prepareStatement(selectSQL);
+			ResultSet rs = preparedStatement.executeQuery();
+			
+			while(rs.next()){
+				Game item = new Game();
+				
+				item.setId(rs.getString("id"));
+				item.setName(rs.getString("nome"));
+				item.setDesc(rs.getString("descrizione"));
+				item.setPlatf(rs.getString("piattaforma"));
+				item.setQt(rs.getInt("quantita"));
+				item.setPrice(rs.getFloat("prezzo"));
+				
+				games.add(item);
+				}
+			} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				DriverManagerConnectionPool.releaseConnection(connection);
+			}
+		}
+		return games;
+	}
+	
+	public synchronized Collection<Game> getForGenere(String genere) throws SQLException{
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		Collection<Game> games = new LinkedList<Game>();
+
+		String selectSQL = "SELECT gioco.* FROM gioco, appartienegenere WHERE gioco.id = appartienegenere.gioco AND genere = ?";
+		
+		try {
+			connection = DriverManagerConnectionPool.getConnection();
+			preparedStatement = connection.prepareStatement(selectSQL);
+			preparedStatement.setString(1, genere);
+			ResultSet rs = preparedStatement.executeQuery();
+			
+			while(rs.next()){
+				Game item = new Game();
+				
+				item.setId(rs.getString("id"));
+				item.setName(rs.getString("nome"));
+				item.setDesc(rs.getString("descrizione"));
+				item.setPlatf(rs.getString("piattaforma"));
+				item.setQt(rs.getInt("quantita"));
+				item.setPrice(rs.getFloat("prezzo"));
+				
+				games.add(item);
+				}
+			} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				DriverManagerConnectionPool.releaseConnection(connection);
+			}
+		}
+		return games;
+	}
+	
 }

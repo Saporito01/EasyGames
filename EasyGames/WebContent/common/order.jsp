@@ -77,6 +77,7 @@
 					<div>
 					<img src="../getCover?id=<%=game.getId()%>" width="381" height="218" alt="copertina">
 					<span class="title"><%=game.getName()%>&nbsp;&nbsp;</span><span class="price"><%=String.format(java.util.Locale.US,"%.2f",game.getPrice())%>&euro;</span>
+					Quantità<%=prodCart.get(game.getId())%>
 					</div>
 					
 				<% } %>

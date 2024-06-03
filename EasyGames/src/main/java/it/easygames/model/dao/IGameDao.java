@@ -20,4 +20,8 @@ public interface IGameDao {
 	public Collection<Game> doRetrieveAll(String order) throws SQLException;
 	
 	public void doUpdate(Game game) throws SQLException;
+	
+	public Collection<Game> getToHomePage() throws SQLException;
+	
+	public Collection<Game> getForGenere(String genere) throws SQLException;
 }

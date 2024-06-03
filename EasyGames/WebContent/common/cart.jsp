@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="java.util.*,it.easygames.model.bean.Game,it.easygames.model.bean.Cart,it.easygames.model.dao.*"%>
-    
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" import="java.util.*,it.easygames.model.bean.Game,it.easygames.model.bean.Cart,it.easygames.model.dao.*"%>
+
 <%
 	Cart cart = (Cart) request.getSession().getAttribute("cart");
 %>
@@ -8,14 +8,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Carrello</title>
 </head>
 <body>
 
-<header>
-<a href="/EasyGames/"><img src="./images/logo.png" width="290" height="65" alt="Logo"></a>
-</header>
+<%@include file="/fragment/header.jsp" %>
 
 <% if(cart != null) { %>
 		<h2>Cart</h2>
@@ -43,6 +41,8 @@
 	<%if(cart != null && !cart.getProducts().isEmpty()){%>
 	<a href="./common/order.jsp"><button>COMPLETA ORDINE</button></a>
 	<% } %>
-	
+
+<%@include file="/fragment/footer.jsp" %>
+
 </body>
 </html>

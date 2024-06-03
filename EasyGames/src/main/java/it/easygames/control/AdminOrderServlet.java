@@ -16,11 +16,11 @@ import it.easygames.model.bean.Ordine;
 import it.easygames.model.dao.OrderControl;
 
 
-@WebServlet("/searchOrder")
-public class SearchOrderServlet extends HttpServlet {
+@WebServlet("/AdminOrder")
+public class AdminOrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public SearchOrderServlet() {
+    public AdminOrderServlet() {
         super();
     }
 

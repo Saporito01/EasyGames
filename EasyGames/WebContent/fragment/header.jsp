@@ -1,27 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
 <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-$(document).ready(function () {
-	  $(".action").on("click", function () {
-	    $(".menu").toggleClass("active");
-	  });
-	});
-</script>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="css/header_style.css">
+<script src="script/headerScript.js"></script>
 </head>
 <body>
 <header>
 
-<a href="/EasyGames/"><img src="images/logo.png" width="290" height="65" alt="Logo"></a>
+<a href="/EasyGames/"><img id="logo" src="images/logo.png" width="250" height="65" alt="Logo"></a>
 
-<div>
-<form action="searchGame" method="get">
+<div id="searchBar" class="search-bar">
+<form id="formSearch" action="searchGame" method="get">
 	<select name="piattaforma">
 	<option value="tutto">Tutto</option>
 	<option value="origin">Origin</option>
@@ -36,13 +31,13 @@ $(document).ready(function () {
 	<option value="epic games">Epic Games</option>
 	</select>
 	<input type="text" name="search" placeholder="Search">
-	<button type="submit">submit</button>
+	<button type="submit"><i class="fa fa-search icon-search icon-color"></i></button>
 </form>
 </div>
 
-<div>
-<a href="CartServlet"><img src="images/carrello.png" width="35" height="35" alt="Carrello"></a>
-</div>
+<i id ="buttonSearchResponsive" class="fa fa-search icon-search icon-color" onclick="toggleSearchBar()"></i>
+
+<i id ="buttonX" class="fa fa-times icon-color fa-2x" onclick="toggleSearchBar()"></i>
 
 <%
 	String accountName = (String) request.getSession().getAttribute("accountName");
@@ -61,9 +56,14 @@ $(document).ready(function () {
 	}
 %>
 
+<div id="account_cart">
+<div class="cart">
+<a href="CartServlet"><img src="images/carrello.png" width="60" height="60" alt="Carrello"></a>
+</div>
+
  <div class="profile-menu">
       <div class="action">
-		<img src="images/profilo.png" width="55" height="55" alt="Account">
+		<img src="images/profilo.png" width="60" height="60" alt="Account">
       </div>
       <div class="menu">
         <div class="profile">
@@ -76,7 +76,7 @@ $(document).ready(function () {
             <a href="#">Account</a>
           </li>
           <li>
-            <a href="#">Ordini</a>
+            <a href="UserOrder">Ordini</a>
           </li>
           <li>
             <a href="<%= logPath %>"><%= log %></a>
@@ -84,6 +84,7 @@ $(document).ready(function () {
         </ul>
       </div>
     </div>
+</div>
 
 </header>
 </body>

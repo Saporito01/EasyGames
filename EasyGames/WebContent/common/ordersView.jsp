@@ -1,48 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="java.util.*, it.easygames.model.bean.Account, it.easygames.model.bean.Ordine"%>
-    
-<%
-ArrayList<String> accountList = (ArrayList<String>) request.getAttribute("accounts");
-if(accountList == null) {
-	response.sendRedirect("../AdminOrder");
-	return;
-}
-%>
 
 <!DOCTYPE html>
-<html lang="it">
+<html>
 <head>
-<link rel="icon" type="image/png" href="./images/logo_scheda.png"/>
 <meta charset="UTF-8">
 
 <style>
 table, th, td {
   border:1px solid black;
 }
-
 </style>
+
 <title>Ordini</title>
+<link rel="icon" type="image/png" href="./images/logo_scheda.png"/>
 </head>
 <body>
 
-<form action="AdminOrder" method="get">
+<%@include file="/fragment/header.jsp" %>
+
+<form action="UserOrder" method="get">
 <input type="date" name="data1">
 <input type="date" name="data2">
-<select name="account">
-<option value="tutto">Tutti</option>
-
-<%
-for(int i=0; i<accountList.size(); i++){
-%>
-<option value="<%=accountList.get(i)%>"><%=accountList.get(i)%></option>
-<%
-}
-%>
-
-</select>
 <input type="submit" value="Cerca">
 </form>
-
+<h1>ULTIMO MESE</h1>
 <table style="width:100%">
   <tr>
     <th>Codice</th>
@@ -69,7 +51,7 @@ if(ordini != null && ordini.size() > 0) {
 
 </table>
 
-<a href="./admin/gestione.jsp"><button>Torna alla Home Admin</button></a>
+<%@include file="/fragment/footer.jsp" %>
 
 </body>
 </html>
