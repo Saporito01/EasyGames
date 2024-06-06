@@ -18,7 +18,7 @@ Game item = (Game) request.getAttribute("game");
 <a href="/EasyGames/"><img src="images/logo.png" width="290" height="65" alt="Logo"></a>
 </header>
 
-<div class="main">
+<div class="main-admin">
 
 <form action="editGame" enctype="multipart/form-data" method="post">
 

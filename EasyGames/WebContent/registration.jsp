@@ -1,16 +1,23 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="images/logo_scheda.png"/>
+<link rel="stylesheet" type="text/css" href="css/login_register.css"/>
 <title>Registrazione</title>
 </head>
 <body>
-<form action="account" method="post"> 
+
+<header>
+<a href="/EasyGames/"><img src="./images/logo.png" width="290" height="65" alt="Logo"></a>
+</header>
+
+<form class="login-form" action="account" method="post"> 
 <fieldset>
-     <legend>Login Custom</legend>
+     <legend id="login-legend">Registrati</legend>
      <label for="nickname">Nickname:</label>
      <input id="nickname" type="text" name="nickname">
      <br>
@@ -29,8 +36,7 @@
      <label for="password">Password:</label>
      <input id="password" type="password" name="password">
      <br>
-     <input type="submit" value="Registrati"/>
-     <input type="reset" value="Reset"/>
+     <input type="submit" class="form-button" value="Registrati"/>
 </fieldset>
 </form>
 </body>

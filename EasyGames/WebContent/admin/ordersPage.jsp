@@ -12,8 +12,10 @@ if(accountList == null) {
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<link rel="icon" type="image/png" href="./images/logo_scheda.png"/>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="./images/logo_scheda.png"/>
+<link rel="stylesheet" type="text/css" href="./css/adminPage_style.css"/>
 
 <style>
 table, th, td {
@@ -24,6 +26,10 @@ table, th, td {
 <title>Ordini</title>
 </head>
 <body>
+
+<header class="header-admin">
+<a href="/EasyGames/admin/gestione.jsp"><img src="./images/logo.png" width="290" height="65" alt="Logo"></a>
+</header>
 
 <form action="AdminOrder" method="get">
 <input type="date" name="data1">
@@ -68,8 +74,6 @@ if(ordini != null && ordini.size() > 0) {
 %>
 
 </table>
-
-<a href="./admin/gestione.jsp"><button>Torna alla Home Admin</button></a>
 
 </body>
 </html>

@@ -63,6 +63,7 @@ footer{
 }
 
 div#copyright{
+	color: white;
 	display: flex;
 	justify-content: center;
 	margin-top: 5px;

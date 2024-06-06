@@ -7,16 +7,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="css/header_style.css">
-<script src="script/headerScript.js"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/header_style.css">
+<script src="${pageContext.request.contextPath}/script/headerScript.js"></script>
 </head>
 <body>
 <header>
 
-<a href="/EasyGames/"><img id="logo" src="images/logo.png" width="250" height="65" alt="Logo"></a>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var specificPage = "/EasyGames/admin/viewGames.jsp";
+    var currentUrl = window.location.pathname;
+
+    if (currentUrl === specificPage) {
+        var myDiv = document.getElementById("account_cart");
+        if (myDiv) {
+            myDiv.style.visibility = "hidden";
+        }
+    }
+});
+</script>
+
+<%
+String servletPath = request.getServletPath();
+String strUrl;
+if(servletPath.toLowerCase().contains("admin"))
+	strUrl = "/EasyGames/admin/gestione.jsp";
+else strUrl = "/EasyGames/";
+%>
+
+<a href="<%=strUrl%>"><img id="logo" src="${pageContext.request.contextPath}/images/logo.png" width="250" height="65" alt="Logo"></a>
 
 <div id="searchBar" class="search-bar">
-<form id="formSearch" action="searchGame" method="get">
+<form id="formSearch" action="${pageContext.request.contextPath}/searchGame" method="get">
 	<select name="piattaforma">
 	<option value="tutto">Tutto</option>
 	<option value="origin">Origin</option>
@@ -31,6 +53,7 @@
 	<option value="epic games">Epic Games</option>
 	</select>
 	<input type="text" name="search" placeholder="Search">
+	<input type="hidden" name="path" value="<%= servletPath %>">
 	<button type="submit"><i class="fa fa-search icon-search icon-color"></i></button>
 </form>
 </div>
@@ -58,12 +81,12 @@
 
 <div id="account_cart">
 <div class="cart">
-<a href="CartServlet"><img src="images/carrello.png" width="60" height="60" alt="Carrello"></a>
+<a href="${pageContext.request.contextPath}/CartServlet"><img src="${pageContext.request.contextPath}/images/carrello.png" width="60" height="60" alt="Carrello"></a>
 </div>
 
  <div class="profile-menu">
       <div class="action">
-		<img src="images/profilo.png" width="60" height="60" alt="Account">
+		<img src="${pageContext.request.contextPath}/images/profilo.png" width="60" height="60" alt="Account">
       </div>
       <div class="menu">
         <div class="profile">
@@ -76,7 +99,7 @@
             <a href="#">Account</a>
           </li>
           <li>
-            <a href="UserOrder">Ordini</a>
+            <a href="${pageContext.request.contextPath}/UserOrder">Ordini</a>
           </li>
           <li>
             <a href="<%= logPath %>"><%= log %></a>

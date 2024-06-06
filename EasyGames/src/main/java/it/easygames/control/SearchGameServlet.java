@@ -29,10 +29,10 @@ public class SearchGameServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String piattaforma = (String) request.getParameter("piattaforma");
 		String nome = (String) request.getParameter("search");
-		String nome1 = (String) request.getParameter("adminSearch");
+		String path = (String) request.getParameter("path");
 		
 		try {
-			RequestDispatcher dispatcher;
+			RequestDispatcher dispatcher = null;
 			
 			if(piattaforma.equals("tutto") && nome.equals(""))
 			{
@@ -41,18 +41,13 @@ public class SearchGameServlet extends HttpServlet {
 			else if(nome != null)
 			{
 				Collection<Game> gameList = gameDAO.searchBarGame(nome, piattaforma);
-				
 				request.setAttribute("gameSearch", gameList);
-				dispatcher = getServletContext().getRequestDispatcher("/common/search.jsp");
-			}
-			else
-			{
-				Collection<Game> gameList = gameDAO.searchBarGame(nome1, piattaforma);
 				
-				request.setAttribute("gameSearch", gameList);
-				dispatcher = getServletContext().getRequestDispatcher("/admin/searchView.jsp");
+				if(path.contains("/admin/"))
+					dispatcher = getServletContext().getRequestDispatcher("/admin/searchView.jsp");
+				else dispatcher = getServletContext().getRequestDispatcher("/common/search.jsp");
 			}
-		
+			
 			dispatcher.forward(request, response);
 		}
 		catch(SQLException e)

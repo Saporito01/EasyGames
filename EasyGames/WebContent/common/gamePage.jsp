@@ -9,6 +9,7 @@ Game game = (Game) request.getAttribute("game");
 <html lang="it">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="./images/logo_scheda.png"/>
 <link rel="stylesheet" type="text/css" href="css/gamePage_style.css"/>
 <title><%=game.getName()%></title>

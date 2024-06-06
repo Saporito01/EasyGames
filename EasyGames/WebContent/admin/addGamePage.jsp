@@ -4,26 +4,34 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="../images/logo_scheda.png"/>
+<link rel="stylesheet" type="text/css" href="../css/adminPage_style.css"/>
 <title>Inserimento giochi</title>
 </head>
 <body>
 
-<header>
-<a href="/EasyGames/"><img src="../images/logo.png" width="290" height="65" alt="Logo"></a>
+<header class="header-admin">
+<a href="/EasyGames/admin/gestione.jsp"><img src="../images/logo.png" width="290" height="65" alt="Logo"></a>
 </header>
 
 <div class="main">
 
-<form action="../addGame" enctype="multipart/form-data" method="post">
+<form class="add-form" action="../addGame" enctype="multipart/form-data" method="post">
+<fieldset>
+<legend id="addGame-legend">AGGIUNGI GIOCO</legend>
 
-Id: <input type="text" name="id" required><br><br>
+<label for="id">Id:</label>
+<input id="id" type="text" name="id" required><br><br>
 
-Nome: <input type="text" name="nome" required><br><br>
+<label for="nome">Nome:</label>
+<input id="nome" type="text" name="nome" required><br><br>
 
-Descrizione: <textarea name="descrizione" required></textarea><br><br>
+<label for="descrizione">Descrizione:</label>
+<textarea id="descrizione" name="descrizione" required></textarea><br><br>
 
-Piattaforma: <select name="piattaforma" required>
+<label for="piattaforma">Piattaforma:</label>
+<select id="piattaforma" name="piattaforma" required>
 	<option value="">Tutto</option>
 	<option value="origin">Origin</option>
 	<option value="steam">Steam</option>
@@ -37,7 +45,6 @@ Piattaforma: <select name="piattaforma" required>
 	<option value="epic games">Epic Games</option>
 	</select><br><br>
 
-Genere: <br>
 <input type="checkbox" name="genere" value="arcade"> Arcade <br>
 <input type="checkbox" name="genere" value="avventura"> Avventura <br>
 <input type="checkbox" name="genere" value="azione"> Azione <br>
@@ -51,19 +58,22 @@ Genere: <br>
 <input type="checkbox" name="genere" value="fps"> FPS <br>
 <input type="checkbox" name="genere" value="rpg"> RPG <br> <br>
 
-Quantità: <input type="number" name="quantita" min="1" required><br><br>
+<label for="quantita">Quantità:</label>
+<input id="quantita" type="number" name="quantita" min="1" required><br><br>
 
-Prezzo: <input type="text" name="prezzo" required><br><br>
+<label for="prezzo">Prezzo:</label>
+<input id="prezzo" type="text" name="prezzo" required><br><br>
 
-Carica copertina:
-<input class="file" type="file" name="copertina" value="" maxlength="255" required><br><br>
+<label for="copertina">Copertina:</label>
+<input id="copertina" class="file" type="file" name="copertina" value="" maxlength="255" required><br><br>
 
 <input type="submit" value="Upload">
 <input type="reset" value="Reset">
 
+</fieldset>
 </form>
 
-<a href="gestione.jsp"><button>TORNA ALLA HOME ADMIN</button></a>
+<div class="toAdminPageButton"><a href="gestione.jsp"><button>TORNA ALLA HOME ADMIN</button></a></div>
 
 </div>
 
