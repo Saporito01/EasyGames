@@ -22,7 +22,10 @@ if(model == null) {
 
 <%@include file="/fragment/header.jsp" %>
 
-<div id="main">
+<div class="main">
+
+<h2>CATALOGO</h2>
+
 <div class="list_item">
 <%
 	if(model != null && model.size() > 0) {

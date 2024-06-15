@@ -1,0 +1,73 @@
+@charset "UTF-8";
+
+body{
+	font-family: Arial, sans-serif;
+    margin-top: 110px;
+    padding: 0;
+    background-color: #f4f4f4;
+    min-height: 85vh; /* Altezza minima del body pari all'altezza del viewport */
+    display: flex;
+    flex-direction: column;
+}
+
+.orders-main {
+	flex: 1;
+}
+
+/* Stilizzazione dell'input */
+.inputDate{
+	display: flex;
+	margin-bottom: 30px;
+	align-items: center;
+}
+
+.inputDate input {
+    padding: 8px;
+    font-size: 16px;
+    border: 2px solid #2C6B8F;
+    border-radius: 4px;
+    margin: 0 auto;
+}
+
+/* Stile generale per la lista degli ordini */
+.order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+    margin: 30px;
+}
+
+.order-list h1 {
+	margin: 0 auto;
+}
+
+.order {
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.products{
+	margin-top: 15px;
+}
+
+.order span:first-child {
+    font-weight: bold;
+}
+
+.order span {
+    display: block;
+}
+
+.order .title {
+    font-weight: bold;
+}
+
+.order .price {
+    color: green;
+}
+
+.order .quantita {
+    font-style: italic;
+}

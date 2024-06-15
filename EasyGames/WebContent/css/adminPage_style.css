@@ -30,7 +30,7 @@ body{
   	margin: 20px auto;
   	padding: 10px;
   	background-color: #fff;
-  	border: 1px solid #ddd;
+  	border: 8px solid #2C6B8F;
   	border-radius: 4px;
 }
 
@@ -73,6 +73,34 @@ input[type="reset"]:hover{
 	text-decoration: none;
 }
 
+#form-button {
+	display: flex;
+    justify-content: center;
+}
+
+#form-button input {
+	margin: 10px;
+}
+
+#remove-button {
+	display: flex;
+	justify-content: center;
+}
+
+#remove-button button {
+	background-color: #2C6B8F;
+  	color: #fff;
+  	border: none;
+  	padding: 10px;
+  	border-radius: 4px;
+  	cursor: pointer;
+  	margin-top: 25px;
+}
+
+#remove-button button:hover {
+	background-color: #34729B;
+}
+
 .menu-gestione button {
 	width: 250px;
 	height: 70px;
@@ -82,4 +110,90 @@ input[type="reset"]:hover{
 	background-color: #2C6B8F;
 	color: white;
 	border-radius: 10px;
+}
+
+.searchOrdersBar {
+	display: flex;
+	justify-content: center;
+	margin-top: 35px;
+	margin-bottom: 30px;
+}
+
+.searchOrdersBar input {
+    padding: 8px;
+    font-size: 16px;
+    border: 2px solid #2C6B8F;
+    border-radius: 4px;
+    margin: 0 auto;
+}
+
+.searchOrdersBar select {
+    padding: 8px;
+    font-size: 16px;
+    border: 2px solid #2C6B8F;
+    border-radius: 4px;
+    margin: 0 auto;
+}
+
+/* Stili generali per il contenitore dell'ordine */
+.order {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.order > span {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.products {
+    margin-top: 20px;
+    padding-left: 20px;
+    border-left: 2px solid #ccc;
+}
+
+.products .title {
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+}
+
+.products .price {
+    font-size: 16px;
+    color: #888;
+    margin-left: 10px;
+}
+
+.products .quantita {
+    font-size: 16px;
+    color: #555;
+    margin-left: 10px;
+}
+
+.products span {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.products span + span {
+    margin-left: 15px;
+}
+
+.products span:last-child {
+    display: block;
+    margin-bottom: 15px;
+}
+
+.products br {
+    margin-bottom: 10px;
+}
+
+/*Stile per l'H1 nel caso non ci siano ordini*/
+.order-list h1 {
+	text-align: center;
 }

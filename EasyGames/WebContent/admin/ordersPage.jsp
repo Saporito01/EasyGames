@@ -1,12 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.*, it.easygames.model.bean.Account, it.easygames.model.bean.Ordine"%>
+    pageEncoding="UTF-8" import="java.util.*, java.time.LocalDate"%>
     
 <%
 ArrayList<String> accountList = (ArrayList<String>) request.getAttribute("accounts");
 if(accountList == null) {
-	response.sendRedirect("../AdminOrder");
+	response.sendRedirect("../AdminOrder?getAccounts=true");
 	return;
 }
+%>
+    
+<%
+LocalDate oggi = LocalDate.now();
+int anno = oggi.getYear();
+int mese = oggi.getMonthValue();
+String annoMese = String.format("%04d-%02d", anno, mese);
 %>
 
 <!DOCTYPE html>
@@ -17,12 +24,43 @@ if(accountList == null) {
 <link rel="icon" type="image/png" href="./images/logo_scheda.png"/>
 <link rel="stylesheet" type="text/css" href="./css/adminPage_style.css"/>
 
-<style>
-table, th, td {
-  border:1px solid black;
+<script>
+function fetchAndRenderOrders(annoMese,accountValue) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'AdminOrder?annoMese=' + annoMese + '&account=' + accountValue, true);
+    
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var ordersListDiv = document.getElementById('ordersList');
+            ordersListDiv.innerHTML = xhr.responseText;
+        } else {
+            console.error('Errore durante il recupero degli ordini. Codice: ' + xhr.status);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.error('Errore di rete durante la richiesta AJAX');
+    };
+
+    xhr.send();
 }
 
-</style>
+document.addEventListener('DOMContentLoaded', function() {
+var form = document.getElementById('searchForm');
+var annoMeseInput = document.querySelector('input[name="annoMese"]');
+var accountSelect = document.getElementById('account');
+    
+    form.addEventListener('change', function() {
+        var annoMeseValue = annoMeseInput.value;
+        var accountValue = accountSelect.value;
+        fetchAndRenderOrders(annoMeseValue,accountValue);
+    });
+    
+ 	// Carica gli ordini iniziali
+    fetchAndRenderOrders('<%=annoMese%>','tutto');
+});
+</script>
+
 <title>Ordini</title>
 </head>
 <body>
@@ -31,49 +69,25 @@ table, th, td {
 <a href="/EasyGames/admin/gestione.jsp"><img src="./images/logo.png" width="290" height="65" alt="Logo"></a>
 </header>
 
-<form action="AdminOrder" method="get">
-<input type="date" name="data1">
-<input type="date" name="data2">
-<select name="account">
-<option value="tutto">Tutti</option>
+<div class="orders-main">
 
-<%
-for(int i=0; i<accountList.size(); i++){
-%>
+<div class="searchOrdersBar">
+<form id="searchForm">
+<input type="month" name="annoMese" value="<%=annoMese%>">
+<select id="account" name="account">
+<option value="tutto">Tutto</option>
+<%for(int i=0; i<accountList.size(); i++){%>
 <option value="<%=accountList.get(i)%>"><%=accountList.get(i)%></option>
-<%
-}
-%>
-
+<%}%>
 </select>
-<input type="submit" value="Cerca">
 </form>
+</div>
 
-<table style="width:100%">
-  <tr>
-    <th>Codice</th>
-    <th>Data</th>
-    <th>Account</th>
-  </tr>
-  <tr>
+<div class="order-list"  id="ordersList">
+    <!-- Gli ordini saranno aggiunti dinamicamente qui -->
+</div>
 
-<%
-Collection<?> ordini = (Collection<?>) request.getAttribute("orderList");
-if(ordini != null && ordini.size() > 0) {
-	Iterator<?> it = ordini.iterator(); 
-	while(it.hasNext()) {
-		Ordine item = (Ordine) it.next();
-%>
-    <td><%=item.getCodice()%></td>
-    <td><%=item.getData()%></td>
-    <td><%=item.getAccount()%></td>
-  </tr>
-<%
-	}
-}
-%>
-
-</table>
+</div>
 
 </body>
 </html>

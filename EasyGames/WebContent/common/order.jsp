@@ -5,57 +5,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../images/logo_scheda.png"/>
+    <link rel="stylesheet" type="text/css" href="../css/order_style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/cart_style.css"/>
     <title>Conferma ordine</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        form {
-            display: grid;
-            gap: 10px;
-        }
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        input, select, textarea {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 100%;
-        }
-        button {
-            padding: 15px;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #218838;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
         <h1>Completa il tuo ordine</h1>
-        <form action="../OrderServlet" method="POST">
+        <form action="../OrderServlet" method="post">
             <div>
                 <label for="name">Nome:</label>
                 <input type="text" id="name" name="name" required>
@@ -67,6 +25,7 @@
             <div>
                 <label for="products">Prodotti:</label>
                 
+                <table>
                 <%Cart cart = (Cart) request.getSession().getAttribute("cart");
                 final IGameDao gameDAO = new GameDao();
 				Map<String,Integer> prodCart = cart.getProducts();
@@ -74,13 +33,13 @@
 				for(String id : gameId){
 					Game game = gameDAO.doRetrieveByKey(id);
 				%>
-					<div>
-					<img src="../getCover?id=<%=game.getId()%>" width="381" height="218" alt="copertina">
-					<span class="title"><%=game.getName()%>&nbsp;&nbsp;</span><span class="price"><%=String.format(java.util.Locale.US,"%.2f",game.getPrice())%>&euro;</span>
-					Quantità<%=prodCart.get(game.getId())%>
-					</div>
-					
+				<tr>
+					<td><span class="title"><%=game.getName()%>&nbsp;&nbsp;</span></td>
+					<td><span class="price"><%=String.format(java.util.Locale.US,"%.2f",game.getPrice())%>&euro;</span></td>
+					<td><span class="quantita">Quantità<%=prodCart.get(game.getId())%></span></td>
+				</tr>
 				<% } %>
+				</table>
                 
             </div>
             <div>

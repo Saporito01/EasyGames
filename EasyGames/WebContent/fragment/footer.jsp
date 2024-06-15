@@ -5,16 +5,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" href="css/footer_style.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/footer_style.css"/>
 </head>
 <body>
 <footer>
 
 <div class="icon">
-<a href=""><img src="images/instagram_icon.png" alt="instagram"></a>
-<a href=""><img src="images/facebook_icon.png" alt="facebook"></a>
-<a href=""><img src="images/twitter_icon.png" alt="twitter"></a>
-<a href=""><img src="images/telegram_icon.png" alt="telegram"></a>
+<a href=""><img src="${pageContext.request.contextPath}/images/instagram_icon.png" alt="instagram"></a>
+<a href=""><img src="${pageContext.request.contextPath}/images/facebook_icon.png" alt="facebook"></a>
+<a href=""><img src="${pageContext.request.contextPath}/images/twitter_icon.png" alt="twitter"></a>
+<a href=""><img src="${pageContext.request.contextPath}/images/telegram_icon.png" alt="telegram"></a>
 </div>
 
 <div class="footer-nav">
@@ -28,7 +28,7 @@
 </div>
 
 <div id="copyright">
-<p>Copyright © 2023 Easy Games - All rights reserved</p>
+<p>Copyright © 2024 Easy Games - All rights reserved</p>
 </div>
 
 </footer>

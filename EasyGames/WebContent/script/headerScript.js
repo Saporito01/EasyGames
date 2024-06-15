@@ -18,4 +18,5 @@ function toggleSearchBar() {
 	  buttonX.classList.toggle('active');
 	  var buttonSearch = document.getElementById('buttonSearchResponsive');
 	  buttonSearch.classList.toggle('active');
-	}
+	  }
+	  

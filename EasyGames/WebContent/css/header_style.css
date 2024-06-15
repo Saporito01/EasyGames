@@ -52,7 +52,7 @@ header{
 }
 
 .search-bar form button i:hover{
-	color: grey;
+	color: #5C8FB3;
 	cursor: pointer;
 }
 
@@ -188,6 +188,7 @@ header{
 		background-color: #e9e9e9;
 		border-radius: 20px;
 		padding: 10px;
+		cursor: pointer;
 	}
 	
 	#buttonSearchResponsive.active{
@@ -200,6 +201,7 @@ header{
 	}
 	
 	#buttonX.active{
+		cursor: pointer;
 		display: block;
 	}
 }

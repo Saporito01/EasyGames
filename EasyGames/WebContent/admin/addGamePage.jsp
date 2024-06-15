@@ -18,8 +18,6 @@
 <div class="main">
 
 <form class="add-form" action="../addGame" enctype="multipart/form-data" method="post">
-<fieldset>
-<legend id="addGame-legend">AGGIUNGI GIOCO</legend>
 
 <label for="id">Id:</label>
 <input id="id" type="text" name="id" required><br><br>
@@ -67,14 +65,12 @@
 <label for="copertina">Copertina:</label>
 <input id="copertina" class="file" type="file" name="copertina" value="" maxlength="255" required><br><br>
 
+<div id="form-button">
 <input type="submit" value="Upload">
 <input type="reset" value="Reset">
+</div>
 
-</fieldset>
 </form>
-
-<div class="toAdminPageButton"><a href="gestione.jsp"><button>TORNA ALLA HOME ADMIN</button></a></div>
-
 </div>
 
 </body>

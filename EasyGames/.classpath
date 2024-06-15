@@ -14,5 +14,6 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="D:/UNIVERSITA&apos;/II Anno/II semestre/Tecnologie Software per il Web/mysql-connector-java-8.0.14.jar"/>
+	<classpathentry kind="lib" path="D:/UNIVERSITA&apos;/II Anno/II semestre/Tecnologie Software per il Web/json-20240303.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

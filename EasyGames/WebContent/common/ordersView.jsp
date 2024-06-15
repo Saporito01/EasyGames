@@ -1,55 +1,69 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.*, it.easygames.model.bean.Account, it.easygames.model.bean.Ordine"%>
+    pageEncoding="UTF-8" import="java.util.*, java.time.LocalDate"%>
+
+<%
+LocalDate oggi = LocalDate.now();
+int anno = oggi.getYear();
+int mese = oggi.getMonthValue();
+String annoMese = String.format("%04d-%02d", anno, mese);
+%>
 
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-
-<style>
-table, th, td {
-  border:1px solid black;
-}
-</style>
-
 <title>Ordini</title>
-<link rel="icon" type="image/png" href="./images/logo_scheda.png"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../images/logo_scheda.png"/>
+<link rel="stylesheet" type="text/css" href="../css/orders_view.css">
+
+<script>
+function fetchAndRenderOrders(annoMese) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '../UserOrder?annoMese=' + annoMese, true);
+    
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var ordersListDiv = document.getElementById('ordersList');
+            ordersListDiv.innerHTML = xhr.responseText;
+        } else {
+            console.error('Errore durante il recupero degli ordini. Codice: ' + xhr.status);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.error('Errore di rete durante la richiesta AJAX');
+    };
+
+    xhr.send();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+var annoMeseInput = document.querySelector('input[name="annoMese"]');
+    
+    annoMeseInput.addEventListener('change', function() {
+        var annoMeseValue = annoMeseInput.value;
+        fetchAndRenderOrders(annoMeseValue);
+    });
+    
+    // Carica gli ordini iniziali
+    fetchAndRenderOrders("<%=annoMese%>");
+});
+</script>
 </head>
 <body>
 
-<%@include file="/fragment/header.jsp" %>
+<%@include file="/fragment/header.jsp"%>
 
-<form action="UserOrder" method="get">
-<input type="date" name="data1">
-<input type="date" name="data2">
-<input type="submit" value="Cerca">
-</form>
-<h1>ULTIMO MESE</h1>
-<table style="width:100%">
-  <tr>
-    <th>Codice</th>
-    <th>Data</th>
-    <th>Account</th>
-  </tr>
-  <tr>
+<div class="orders-main">
 
-<%
-Collection<?> ordini = (Collection<?>) request.getAttribute("orderList");
-if(ordini != null && ordini.size() > 0) {
-	Iterator<?> it = ordini.iterator(); 
-	while(it.hasNext()) {
-		Ordine item = (Ordine) it.next();
-%>
-    <td><%=item.getCodice()%></td>
-    <td><%=item.getData()%></td>
-    <td><%=item.getAccount()%></td>
-  </tr>
-<%
-	}
-}
-%>
+<div class="inputDate"><input type="month" name="annoMese" value="<%=annoMese%>"></div>
 
-</table>
+<div class="order-list"  id="ordersList">
+    <!-- Gli ordini saranno aggiunti dinamicamente qui -->
+</div>
+
+</div>
 
 <%@include file="/fragment/footer.jsp" %>
 

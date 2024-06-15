@@ -13,17 +13,31 @@
 
 <%@include file="/fragment/header.jsp" %>
 
-<div id="main">
-<h2 class="align">Risultati</h2>
-<div class="list_item">
 <%
 	Collection<?> model = (Collection<?>) request.getAttribute("gameSearch");
-	if(model != null && model.size() > 0) {
-		Iterator<?> it = model.iterator(); 
-		while(it.hasNext()) {
-			Game item = (Game)it.next();
 %>
 
+<div class="main">
+
+<%
+	if(model.isEmpty()){
+%>
+<h2 class="align">NESSUN RISULTATO</h2>
+<%
+	}
+	else{
+%>
+<h2 class="align">RISULTATI</h2>
+<%}%>
+
+<%
+if(model != null && model.size() > 0) {
+	Iterator<?> it = model.iterator(); 
+	while(it.hasNext()) {
+		Game item = (Game)it.next();
+%>
+
+<div class="list_item">
 <div class="item">
 <a href="getGame?idHome=<%=item.getId()%>">
 <img src="getCover?id=<%=item.getId()%>" width="381" height="218" alt="copertina">

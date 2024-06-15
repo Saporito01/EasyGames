@@ -9,18 +9,23 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="images/logo_scheda.png"/>
+<link rel="stylesheet" type="text/css" href="css/cart_style.css"/>
 <title>Carrello</title>
 </head>
 <body>
 
 <%@include file="/fragment/header.jsp" %>
 
+<div class="container">
+<div class="main">
 <% if(cart != null) { %>
-		<h2>Cart</h2>
-		<table border="1">
+		<h2>Carrello</h2>
+		<table>
 		<tr>
-			<th>Name</th>
-			<th>Quantita'</th>
+			<th>Nome</th>
+			<th>Quantità</th>
 		</tr>
 		<% 
 		final IGameDao gameDAO = new GameDao();
@@ -41,6 +46,8 @@
 	<%if(cart != null && !cart.getProducts().isEmpty()){%>
 	<a href="./common/order.jsp"><button>COMPLETA ORDINE</button></a>
 	<% } %>
+</div>
+</div>
 
 <%@include file="/fragment/footer.jsp" %>
 

@@ -22,7 +22,7 @@ if(model == null) {
 
 <%@include file="/fragment/header.jsp" %>
 
-<div id="main">
+<div class="main">
 
 <h2>IN EVIDENZA</h2>
 

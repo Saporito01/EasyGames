@@ -8,28 +8,33 @@ Game item = (Game) request.getAttribute("game");
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<link rel="icon" type="image/png" href="./images/logo_scheda.png"/>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="./images/logo_scheda.png"/>
+<link rel="stylesheet" type="text/css" href="css/adminPage_style.css"/>
 <title>Modifica gioco</title>
 </head>
 <body>
 
-<header>
-<a href="/EasyGames/"><img src="images/logo.png" width="290" height="65" alt="Logo"></a>
+<header class="header-admin">
+<a href="/EasyGames/admin/gestione.jsp"><img src="images/logo.png" width="290" height="65" alt="Logo"></a>
 </header>
 
-<div class="main-admin">
+<div class="main">
 
-<form action="editGame" enctype="multipart/form-data" method="post">
+<form class="add-form" action="editGame" enctype="multipart/form-data" method="post">
 
-Id: <input type="text" name="id" value="<%=item.getId()%>" readonly="readonly"><br><br>
+<label for="id">Id:</label>
+<input id="id" type="text" name="id" value="<%=item.getId()%>" readonly="readonly"><br><br>
 
-Nome: <input type="text" name="nome" value="<%=item.getName()%>" required><br><br>
+<label for="nome">Nome:</label>
+<input id="nome" type="text" name="nome" value="<%=item.getName()%>" required><br><br>
 
-Descrizione: <textarea name="descrizione" required><%=item.getDesc()%></textarea><br><br>
+<label for="descrizione">Descrizione:</label>
+<textarea id="descrizione" name="descrizione" required><%=item.getDesc()%></textarea><br><br>
 
-Piattaforma: <%=item.getPlatf()%>
-	<select name="piattaforma" required>
+<label for="piattaforma">Piattaforma: <%=item.getPlatf()%></label>
+<select id="piattaforma" name="piattaforma" required>
 	<option value="tutto">Tutto</option>
 	<option value="origin">Origin</option>
 	<option value="steam">Steam</option>
@@ -43,23 +48,23 @@ Piattaforma: <%=item.getPlatf()%>
 	<option value="epic games">Epic Games</option>
 	</select><br><br>
 	
-Quantità: <input type="number" name="quantita" min="1" value="<%=item.getQt()%>" required><br><br>
+<label for="quantita">Quantità:</label>
+<input id="quantita" type="number" name="quantita" min="1" value="<%=item.getQt()%>" required><br><br>
 
-Prezzo: <input type="text" name="prezzo" value="<%=item.getPrice()%>" required><br><br>
+<label for="prezzo">Prezzo:</label>
+<input id="prezzo" type="text" name="prezzo" value="<%=item.getPrice()%>" required><br><br>
 
-Carica nuova copertina:
-<input class="file" type="file" name="copertina" value="" maxlength="255"><br><br>
+<label for="copertina">Carica nuova copertina:</label>
+<input id="copertina" class="file" type="file" name="copertina" value="" maxlength="255"><br><br>
 
+<div id="form-button">
 <input type="submit" value="Aggiorna">
 <input type="reset" value="Reset">
+</div>
+
+<div id="remove-button"><a href="editGame?idRemove=<%=item.getId()%>"><button>Rimuovi</button></a></div>
 
 </form>
-
-<br>
-
-<a href="editGame?idRemove=<%=item.getId()%>"><button>Rimuovi</button></a>
-
-<a href="admin/gestione.jsp"><button>Torna alla Home Admin</button></a>
 
 </div>
 

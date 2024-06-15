@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="java.util.*, java.time.LocalDate"%>
     
 <!DOCTYPE html>
 <html lang="it">
@@ -9,9 +9,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/header_style.css">
 <script src="${pageContext.request.contextPath}/script/headerScript.js"></script>
-</head>
-<body>
-<header>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -26,6 +23,10 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 </script>
+
+</head>
+<body>
+<header>
 
 <%
 String servletPath = request.getServletPath();
@@ -99,7 +100,7 @@ else strUrl = "/EasyGames/";
             <a href="#">Account</a>
           </li>
           <li>
-            <a href="${pageContext.request.contextPath}/UserOrder">Ordini</a>
+            <a href="${pageContext.request.contextPath}/common/ordersView.jsp">Ordini</a>
           </li>
           <li>
             <a href="<%= logPath %>"><%= log %></a>

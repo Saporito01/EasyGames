@@ -71,62 +71,6 @@ public class OrderControl {
 		return ordini;
 	}
 	
-	static public synchronized Collection<Ordine> loadForUser(String user) throws SQLException {
-
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		PreparedStatement stmt2 = null;
-		
-		Collection<Ordine> ordini = new LinkedList<Ordine>();
-
-		//prende tutti gli ordini dell'ultimo mese di un determinato utente
-		String selectSQL = "SELECT * FROM ordine WHERE account = ? AND data >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) ORDER BY data";
-
-		String select2 = "SELECT gioco, quantita FROM giochi_acquistati WHERE ordine = ?";
-		
-		try
-		{
-			connection = DriverManagerConnectionPool.getConnection();
-			preparedStatement = connection.prepareStatement(selectSQL);
-			preparedStatement.setString(1, user);
-			
-			ResultSet rs = preparedStatement.executeQuery();
-			
-			while(rs.next()) {
-				Ordine ordine = new Ordine();
-				
-				ordine.setCodice(rs.getInt("codice"));
-				ordine.setData(rs.getString("data"));
-				ordine.setOra(rs.getString("ora"));
-				ordine.setAccount(rs.getString("account"));
-				
-				stmt2 = connection.prepareStatement(select2);
-				stmt2.setInt(1, ordine.getCodice());
-				ResultSet rs2 = stmt2.executeQuery();
-				while(rs2.next())
-					ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
-				
-				ordini.add(ordine);
-			}
-		}
-		finally
-		{
-			try
-			{
-				if (preparedStatement != null)
-					preparedStatement.close();
-				if (stmt2 != null)
-					stmt2.close();
-			}
-			finally
-			{
-				DriverManagerConnectionPool.releaseConnection(connection);
-			}
-		}
-		
-		return ordini;
-	}
-	
 	static public synchronized ArrayList<String> loadOrderAccount() throws SQLException {
 		//valutare la rimozione di questo metodo, posso recuperare la stessa informazione tramite un metodo del dao per gli account
 
@@ -221,243 +165,84 @@ public class OrderControl {
 	}
 	
 	
-	static public synchronized Collection<Ordine> doRetrieveByDate(String data1, String data2, String account) throws SQLException {
+	static public synchronized Collection<Ordine> doRetrieveByDate(int mese, int anno, String account) throws SQLException {
 
 		Connection connection = null;
-		PreparedStatement preparedStatement = null;
+		PreparedStatement stmt1 = null;
 		PreparedStatement stmt2 = null;
-		String select2 = "SELECT gioco, quantita FROM giochi_acquistati WHERE ordine = ?";
-		
 		Collection<Ordine> ordini = new LinkedList<Ordine>();
-
+		
 		try
-		{
-			if(!data1.equalsIgnoreCase("") && !data2.equalsIgnoreCase("") && account.equalsIgnoreCase("tutto"))
-			{
-				String selectSQL = "SELECT * FROM ordine WHERE data BETWEEN ? AND ?";
+		{	
+			//prende tutti gli ordini effettuati in un determinato mese
+			if(account.equals("tutto")) {
+				String select1 = "SELECT * FROM ordine WHERE MONTH(data) = ? AND YEAR(data) = ?";
+				String select2 = "SELECT gioco, quantita FROM giochi_acquistati WHERE ordine = ?";
+				
 				connection = DriverManagerConnectionPool.getConnection();
-				preparedStatement = connection.prepareStatement(selectSQL);
-				
-				preparedStatement.setString(1, data1);
-				preparedStatement.setString(2, data2);
-				
-				ResultSet rs = preparedStatement.executeQuery();
-				
+				stmt1 = connection.prepareStatement(select1);
+					
+				stmt1.setInt(1, mese);
+				stmt1.setInt(2, anno);
+					
+				ResultSet rs = stmt1.executeQuery();
+					
 				while(rs.next()) {
 					Ordine ordine = new Ordine();
-					
+						
 					ordine.setCodice(rs.getInt("codice"));
 					ordine.setData(rs.getString("data"));
 					ordine.setOra(rs.getString("ora"));
 					ordine.setAccount(rs.getString("account"));
-					
+						
 					stmt2 = connection.prepareStatement(select2);
-					stmt2.setInt(1, ordine.getCodice());
-					ResultSet rs2 = stmt2.executeQuery();
-					while(rs2.next())
-						ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
-					
+				    stmt2.setInt(1, ordine.getCodice());
+				    ResultSet rs2 = stmt2.executeQuery();
+				    while(rs2.next())
+				    	ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
+						
 					ordini.add(ordine);
 				}
 			}
-			else if(!data1.equalsIgnoreCase("") && data2.equalsIgnoreCase("") && account.equalsIgnoreCase("tutto"))
-			{
-				String selectSQL = "SELECT * FROM ordine WHERE data >= ?";
+			else {
+				//prende tutti gli ordini effettuati in un determinato mese da un determinato account
+				String select1 = "SELECT * FROM ordine WHERE MONTH(data) = ? AND YEAR(data) = ? AND account = ?";
+				String select2 = "SELECT gioco, quantita FROM giochi_acquistati WHERE ordine = ?";
+				
 				connection = DriverManagerConnectionPool.getConnection();
-				preparedStatement = connection.prepareStatement(selectSQL);
-				
-				preparedStatement.setString(1, data1);
-				
-				ResultSet rs = preparedStatement.executeQuery();
-				
+				stmt1 = connection.prepareStatement(select1);
+					
+				stmt1.setInt(1, mese);
+				stmt1.setInt(2, anno);
+				stmt1.setString(3, account);
+					
+				ResultSet rs = stmt1.executeQuery();
+					
 				while(rs.next()) {
 					Ordine ordine = new Ordine();
-					
+						
 					ordine.setCodice(rs.getInt("codice"));
 					ordine.setData(rs.getString("data"));
 					ordine.setOra(rs.getString("ora"));
 					ordine.setAccount(rs.getString("account"));
-					
+						
 					stmt2 = connection.prepareStatement(select2);
-					stmt2.setInt(1, ordine.getCodice());
-					ResultSet rs2 = stmt2.executeQuery();
-					while(rs2.next())
-						ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
-					
+				    stmt2.setInt(1, ordine.getCodice());
+				    ResultSet rs2 = stmt2.executeQuery();
+				    while(rs2.next())
+				    	ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
+						
 					ordini.add(ordine);
 				}
 			}
-			else if(data1.equalsIgnoreCase("") && !data2.equalsIgnoreCase("") && account.equalsIgnoreCase("tutto"))
-			{
-				String selectSQL = "SELECT * FROM ordine WHERE data <= ?";
-				connection = DriverManagerConnectionPool.getConnection();
-				preparedStatement = connection.prepareStatement(selectSQL);
-				
-				preparedStatement.setString(1, data2);
-				
-				ResultSet rs = preparedStatement.executeQuery();
-				
-				while(rs.next()) {
-					Ordine ordine = new Ordine();
-					
-					ordine.setCodice(rs.getInt("codice"));
-					ordine.setData(rs.getString("data"));
-					ordine.setOra(rs.getString("ora"));
-					ordine.setAccount(rs.getString("account"));
-					
-					stmt2 = connection.prepareStatement(select2);
-					stmt2.setInt(1, ordine.getCodice());
-					ResultSet rs2 = stmt2.executeQuery();
-					while(rs2.next())
-						ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
-					
-					ordini.add(ordine);
-				}
-			}
-			else if(data1.equalsIgnoreCase("") && data2.equalsIgnoreCase("") && !account.equalsIgnoreCase("tutto"))
-			{
-				String selectSQL = "SELECT * FROM ordine WHERE account = ?";
-				connection = DriverManagerConnectionPool.getConnection();
-				preparedStatement = connection.prepareStatement(selectSQL);
-				
-				preparedStatement.setString(1, account);
-				
-				ResultSet rs = preparedStatement.executeQuery();
-				
-				while(rs.next()) {
-					Ordine ordine = new Ordine();
-					
-					ordine.setCodice(rs.getInt("codice"));
-					ordine.setData(rs.getString("data"));
-					ordine.setOra(rs.getString("ora"));
-					ordine.setAccount(rs.getString("account"));
-					
-					stmt2 = connection.prepareStatement(select2);
-					stmt2.setInt(1, ordine.getCodice());
-					ResultSet rs2 = stmt2.executeQuery();
-					while(rs2.next())
-						ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
-					
-					ordini.add(ordine);
-				}
-			}
-			else if(data1.equalsIgnoreCase("") && data2.equalsIgnoreCase("") && account.equalsIgnoreCase("tutto"))
-			{
-				String selectSQL = "SELECT * FROM ordine ORDER BY codice";
-				connection = DriverManagerConnectionPool.getConnection();
-				preparedStatement = connection.prepareStatement(selectSQL);
-				
-				ResultSet rs = preparedStatement.executeQuery();
-				
-				while(rs.next()) {
-					Ordine ordine = new Ordine();
-					
-					ordine.setCodice(rs.getInt("codice"));
-					ordine.setData(rs.getString("data"));
-					ordine.setOra(rs.getString("ora"));
-					ordine.setAccount(rs.getString("account"));
-					
-					stmt2 = connection.prepareStatement(select2);
-					stmt2.setInt(1, ordine.getCodice());
-					ResultSet rs2 = stmt2.executeQuery();
-					while(rs2.next())
-						ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
-					
-					ordini.add(ordine);
-				}
-			}
-			else if(!data1.equalsIgnoreCase("") && data2.equalsIgnoreCase("") && !account.equalsIgnoreCase("tutto"))
-			{
-				String selectSQL = "SELECT * FROM ordine WHERE data >= ? AND account = ?";
-				connection = DriverManagerConnectionPool.getConnection();
-				preparedStatement = connection.prepareStatement(selectSQL);
-				
-				preparedStatement.setString(1, data1);
-				preparedStatement.setString(2, account);
-				
-				ResultSet rs = preparedStatement.executeQuery();
-				
-				while(rs.next()) {
-					Ordine ordine = new Ordine();
-					
-					ordine.setCodice(rs.getInt("codice"));
-					ordine.setData(rs.getString("data"));
-					ordine.setOra(rs.getString("ora"));
-					ordine.setAccount(rs.getString("account"));
-					
-					stmt2 = connection.prepareStatement(select2);
-					stmt2.setInt(1, ordine.getCodice());
-					ResultSet rs2 = stmt2.executeQuery();
-					while(rs2.next())
-						ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
-					
-					ordini.add(ordine);
-				}
-			}
-			else if(data1.equalsIgnoreCase("") && !data2.equalsIgnoreCase("") && !account.equalsIgnoreCase("tutto"))
-			{
-				String selectSQL = "SELECT * FROM ordine WHERE data <= ? AND account = ?";
-				connection = DriverManagerConnectionPool.getConnection();
-				preparedStatement = connection.prepareStatement(selectSQL);
-				
-				preparedStatement.setString(1, data2);
-				preparedStatement.setString(2, account);
-				
-				ResultSet rs = preparedStatement.executeQuery();
-				
-				while(rs.next()) {
-					Ordine ordine = new Ordine();
-					
-					ordine.setCodice(rs.getInt("codice"));
-					ordine.setData(rs.getString("data"));
-					ordine.setOra(rs.getString("ora"));
-					ordine.setAccount(rs.getString("account"));
-					
-					stmt2 = connection.prepareStatement(select2);
-					stmt2.setInt(1, ordine.getCodice());
-					ResultSet rs2 = stmt2.executeQuery();
-					while(rs2.next())
-						ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
-					
-					ordini.add(ordine);
-				}
-			}
-			else
-			{
-				String selectSQL = "SELECT * FROM ordine WHERE account = ? AND data BETWEEN ? AND ?";
-				connection = DriverManagerConnectionPool.getConnection();
-				preparedStatement = connection.prepareStatement(selectSQL);
-				
-				preparedStatement.setString(1, account);
-				preparedStatement.setString(2, data1);
-				preparedStatement.setString(3, data2);
-				
-				ResultSet rs = preparedStatement.executeQuery();
-				
-				while(rs.next()) {
-					Ordine ordine = new Ordine();
-					
-					ordine.setCodice(rs.getInt("codice"));
-					ordine.setData(rs.getString("data"));
-					ordine.setOra(rs.getString("ora"));
-					ordine.setAccount(rs.getString("account"));
-					
-					stmt2 = connection.prepareStatement(select2);
-					stmt2.setInt(1, ordine.getCodice());
-					ResultSet rs2 = stmt2.executeQuery();
-					while(rs2.next())
-						ordine.addProduct(rs2.getString("gioco"), rs2.getInt("quantita"));
-					
-					ordini.add(ordine);
-				}
-			}
+			
 		}
 		finally
 		{
 			try
 			{
-				if (preparedStatement != null)
-					preparedStatement.close();
+				if (stmt1 != null)
+					stmt1.close();
 				if (stmt2 != null)
 					stmt2.close();
 			}
