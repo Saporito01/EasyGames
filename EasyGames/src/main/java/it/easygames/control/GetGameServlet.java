@@ -47,6 +47,9 @@ public class GetGameServlet extends HttpServlet {
 				Game game = gameDAO.doRetrieveByKey(idGameHome);
 				request.setAttribute("game", game);
 				
+				int qt = gameDAO.quantityCheck(idGameHome);
+				request.setAttribute("quantità", qt);
+				
 				RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/common/gamePage.jsp");
 				dispatcher.forward(request, response);
 			}

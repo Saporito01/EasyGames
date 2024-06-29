@@ -1,5 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="java.util.*,it.easygames.model.bean.Cart,it.easygames.model.bean.Game,it.easygames.model.dao.*"%>
+
+<%
+Cart cart = (Cart) request.getSession().getAttribute("cart");
+
+Collection<?> model = (Collection<?>) request.getAttribute("gameList");
+if(model == null) {
+	request.getRequestDispatcher("../GetCartProducts?page=order").forward(request, response);
+	return;
+}
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,19 +37,22 @@
                 <label for="products">Prodotti:</label>
                 
                 <table>
-                <%Cart cart = (Cart) request.getSession().getAttribute("cart");
-                final IGameDao gameDAO = new GameDao();
-				Map<String,Integer> prodCart = cart.getProducts();
-				List<String> gameId = new ArrayList<>(prodCart.keySet());
-				for(String id : gameId){
-					Game game = gameDAO.doRetrieveByKey(id);
+                <%
+                if(model != null && model.size() > 0) {
+        			Iterator<?> it = model.iterator();
+        			Map<String,Integer> prodCart = cart.getProducts();
+        			while(it.hasNext()) {
+        				Game game = (Game)it.next();
 				%>
 				<tr>
 					<td><span class="title"><%=game.getName()%>&nbsp;&nbsp;</span></td>
 					<td><span class="price"><%=String.format(java.util.Locale.US,"%.2f",game.getPrice())%>&euro;</span></td>
 					<td><span class="quantita">Quantità<%=prodCart.get(game.getId())%></span></td>
 				</tr>
-				<% } %>
+				<%
+					}
+        		}
+        		%>
 				</table>
                 
             </div>

@@ -41,7 +41,7 @@ public class Login extends HttpServlet {
     	RequestDispatcher dispatcherToLoginPage = request.getRequestDispatcher("login.jsp");
     	
 		if(username == null || username.trim().isEmpty()) {
-			errors.add("Il campo username non può essere vuoto!");
+			errors.add("Il campo username non può essere vuoto!<br>");
 		}
         if(password == null || password.trim().isEmpty()) {
         	errors.add("Il campo password non può essere vuoto!");

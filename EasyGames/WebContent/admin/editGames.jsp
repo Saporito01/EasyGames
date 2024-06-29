@@ -33,7 +33,7 @@ Game item = (Game) request.getAttribute("game");
 <label for="descrizione">Descrizione:</label>
 <textarea id="descrizione" name="descrizione" required><%=item.getDesc()%></textarea><br><br>
 
-<label for="piattaforma">Piattaforma: <%=item.getPlatf()%></label>
+<label for="piattaforma">Piattaforma: <%=item.getPlatf()%></label><br>
 <select id="piattaforma" name="piattaforma" required>
 	<option value="tutto">Tutto</option>
 	<option value="origin">Origin</option>

@@ -2,7 +2,13 @@
     pageEncoding="UTF-8" import="java.util.*,it.easygames.model.bean.Game,it.easygames.model.bean.Cart,it.easygames.model.dao.*"%>
 
 <%
-	Cart cart = (Cart) request.getSession().getAttribute("cart");
+Cart cart = (Cart) request.getSession().getAttribute("cart");
+
+Collection<?> model = (Collection<?>) request.getAttribute("gameList");
+if(model == null) {
+	request.getRequestDispatcher("../GetCartProducts?page=cart").forward(request, response);
+	return;
+}
 %>
 
 <!DOCTYPE html>
@@ -20,28 +26,39 @@
 
 <div class="container">
 <div class="main">
-<% if(cart != null) { %>
+<%
+	if(model.isEmpty()){
+%>
+		<h2>Il tuo carrello è vuoto</h2>
+<%
+	}
+	else {
+%>
+		
 		<h2>Carrello</h2>
 		<table>
 		<tr>
 			<th>Nome</th>
 			<th>Quantità</th>
 		</tr>
-		<% 
-		final IGameDao gameDAO = new GameDao();
-		Map<String,Integer> prodCart = cart.getProducts();
-		List<String> gameId = new ArrayList<>(prodCart.keySet());
-		for(String id : gameId){
-			Game game = gameDAO.doRetrieveByKey(id);
+		<%
+		if(model != null && model.size() > 0) {
+			Iterator<?> it = model.iterator();
+			Map<String,Integer> prodCart = cart.getProducts();
+			while(it.hasNext()) {
+				Game game = (Game)it.next();
 		%>
 		<tr>
 			<td><%=game.getName()%></td>
-			<td><a href="./CartServlet?azione=rimuovi&id=<%=id%>">-</a><%=prodCart.get(id)%><a href="./CartServlet?azione=aggiungi&id=<%=id%>">+</a></td>
-			<td><a href="./CartServlet?azione=elimina&id=<%=id%>">ELIMINA</a></td>
+			<td><a href="./CartServlet?azione=rimuovi&id=<%=game.getId()%>">-</a><%=prodCart.get(game.getId())%><a href="./CartServlet?azione=aggiungi&id=<%=game.getId()%>">+</a></td>
+			<td><a href="./CartServlet?azione=elimina&id=<%=game.getId()%>">ELIMINA</a></td>
 		</tr>
-		<% } %>
+	<%
+			}
+		}
+	}
+	%>
 	</table>
-	<% } %>
 	
 	<%if(cart != null && !cart.getProducts().isEmpty()){%>
 	<a href="./common/order.jsp"><button>COMPLETA ORDINE</button></a>

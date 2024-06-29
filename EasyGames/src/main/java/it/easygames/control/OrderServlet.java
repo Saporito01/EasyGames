@@ -19,11 +19,15 @@ import javax.servlet.http.HttpServletResponse;
 import it.easygames.model.bean.Cart;
 import it.easygames.model.bean.Ordine;
 import it.easygames.model.dao.CartControl;
+import it.easygames.model.dao.GameDao;
+import it.easygames.model.dao.IGameDao;
 import it.easygames.model.dao.OrderControl;
 
 @WebServlet("/OrderServlet")
 public class OrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	static IGameDao gameDAO = new GameDao();
        
     public OrderServlet() {
         super();
@@ -43,7 +47,7 @@ public class OrderServlet extends HttpServlet {
         LocalTime currentTime = LocalTime.now();
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         String formattedTime = currentTime.format(timeFormatter);
-        
+
         Cart cart = (Cart)request.getSession().getAttribute("cart");
         Map<String,Integer> products = cart.getProducts();
 		List<String> gameId = new ArrayList<>(products.keySet());
@@ -58,6 +62,7 @@ public class OrderServlet extends HttpServlet {
         
         try {
 			OrderControl.doSave(ordine);
+			gameDAO.removeSoldGames(products);
 			cart.clear();
 			CartControl.updateCart(cart);
 		} catch (SQLException e) {

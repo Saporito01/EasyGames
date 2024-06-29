@@ -49,5 +49,5 @@ public class Ordine {
 	private String data;
 	private String ora;
 	private String account;
-	private Map<String, Integer> products;
+	private Map<String,Integer> products;
 }

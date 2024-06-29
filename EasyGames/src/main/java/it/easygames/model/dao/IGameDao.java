@@ -2,6 +2,7 @@ package it.easygames.model.dao;
 
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Map;
 
 import it.easygames.model.bean.Game;
 
@@ -24,4 +25,8 @@ public interface IGameDao {
 	public Collection<Game> getToHomePage() throws SQLException;
 	
 	public Collection<Game> getForGenere(String genere) throws SQLException;
+	
+	public void removeSoldGames(Map<String,Integer> games) throws SQLException;
+	
+	public int quantityCheck(String id) throws SQLException;
 }

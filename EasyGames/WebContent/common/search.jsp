@@ -30,6 +30,8 @@
 <h2 class="align">RISULTATI</h2>
 <%}%>
 
+<div class="list_item">
+
 <%
 if(model != null && model.size() > 0) {
 	Iterator<?> it = model.iterator(); 
@@ -37,7 +39,6 @@ if(model != null && model.size() > 0) {
 		Game item = (Game)it.next();
 %>
 
-<div class="list_item">
 <div class="item">
 <a href="getGame?idHome=<%=item.getId()%>">
 <img src="getCover?id=<%=item.getId()%>" width="381" height="218" alt="copertina">
@@ -51,6 +52,7 @@ if(model != null && model.size() > 0) {
 %>
 
 </div>
+
 </div>
 
 <%@include file="/fragment/footer.jsp" %>

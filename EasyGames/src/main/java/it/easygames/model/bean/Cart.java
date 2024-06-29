@@ -6,7 +6,7 @@ import java.util.Map;
 public class Cart {
 
 	private String userId;
-    private Map<String, Integer> products;
+    private Map<String,Integer> products;
 
     public Cart(String userId) {
         this.userId = userId;

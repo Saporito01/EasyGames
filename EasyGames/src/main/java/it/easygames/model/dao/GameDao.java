@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import it.easygames.model.bean.Game;
 
@@ -347,4 +348,58 @@ private static final String TABLE_NAME = "gioco";
 		return games;
 	}
 	
+	public synchronized void removeSoldGames(Map<String,Integer> games) throws SQLException{
+		Connection connection = DriverManagerConnectionPool.getConnection();
+		PreparedStatement preparedStatement = null;
+		List<String> gameId = new ArrayList<>(games.keySet());
+
+		String updateSQL = "UPDATE gioco SET quantita = quantita - ? WHERE id = ?";
+		
+		try {
+			
+			for(String id : gameId) {
+				preparedStatement = connection.prepareStatement(updateSQL);
+				preparedStatement.setInt(1, games.get(id));
+				preparedStatement.setString(2, id);
+				preparedStatement.executeUpdate();
+				connection.commit();
+			}
+			
+			} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				DriverManagerConnectionPool.releaseConnection(connection);
+			}
+		}
+	}
+	
+	public synchronized int quantityCheck(String id) throws SQLException{
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		int qt = 0;
+
+		String selectSQL = "SELECT quantita FROM " + GameDao.TABLE_NAME + " WHERE id = ?";
+
+		try {
+			connection = DriverManagerConnectionPool.getConnection();
+			preparedStatement = connection.prepareStatement(selectSQL);
+			preparedStatement.setString(1, id);
+
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next())
+				qt = rs.getInt("quantita");
+
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				DriverManagerConnectionPool.releaseConnection(connection);
+			}
+		}
+		return qt;
+	}
 }

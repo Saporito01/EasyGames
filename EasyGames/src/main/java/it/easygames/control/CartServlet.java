@@ -2,6 +2,7 @@ package it.easygames.control;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -45,16 +46,25 @@ public class CartServlet extends HttpServlet {
         String azione = request.getParameter("azione");
         String gameId = request.getParameter("id");
 
-        if(azione != null) {
-        	if(azione.equals("aggiungi"))
-                cart.addProduct(gameId);
-            else if(azione.equals("rimuovi"))
-                cart.removeProduct(gameId);
-            else if(azione.equals("elimina"))
-            	cart.removeCompletelyProduct(gameId);
-        }
-        
         try {
+        	if(azione != null) {
+            	if(azione.equals("aggiungi")) {
+            		//prima di aumentare la quantità controllo se affettivamente sono disponibili altre key di quel gioco
+            		Map<String,Integer> products = cart.getProducts();
+            		Integer qtCart = products.get(gameId);
+            		if(qtCart != null) {
+            			int qtAvailable = gameDAO.quantityCheck(gameId) - products.get(gameId);
+                		if(qtAvailable > 0)
+                			cart.addProduct(gameId);
+            		}
+            		else cart.addProduct(gameId);
+            	}
+                else if(azione.equals("rimuovi"))
+                    cart.removeProduct(gameId);
+                else if(azione.equals("elimina"))
+                	cart.removeCompletelyProduct(gameId);
+            }
+        
 			if(!(cart.getUserId().equals("ospite")))
 				CartControl.updateCart(cart);
 		} catch (SQLException e) {
