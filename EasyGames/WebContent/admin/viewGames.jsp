@@ -45,8 +45,8 @@ if(model == null) {
 		}
 	}
 %>
-</div>
 
+</div>
 </div>
 
 </body>

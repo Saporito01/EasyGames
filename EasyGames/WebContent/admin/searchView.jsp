@@ -3,13 +3,21 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<link rel="icon" type="image/png" href="../images/logo_scheda.png"/>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="./images/logo_scheda.png"/>
+<link rel="stylesheet" type="text/css" href="./css/style.css"/>
 <title>Risultati</title>
 </head>
 <body>
 
-<div>
+<%@include file="/fragment/header.jsp" %>
+
+<div class="main">
+
+<h2>Risultati</h2>
+
+<div class="list_item">
 <%
 Collection<?> model = (Collection<?>) request.getAttribute("gameSearch");
 	if(model != null && model.size() > 0) {
@@ -18,17 +26,20 @@ Collection<?> model = (Collection<?>) request.getAttribute("gameSearch");
 			Game item = (Game)it.next();
 %>
 
-<a href="getGame?idAdmin=<%=item.getId()%>"><img src="getCover?id=<%=item.getId()%>" width="350" height="200" alt="copertina">
-<%=item.getName()%>
+<div class="item">
+<a href="getGame?idAdmin=<%=item.getId()%>">
+<img src="getCover?id=<%=item.getId()%>" width="350" height="200" alt="copertina">
 </a>
+<span class="title"><%=item.getName()%></span>
+</div>
 
 <%
 		}
 	}
 %>
-</div>
 
-<a href="gestione.jsp"><button>Torna alla Home Admin</button></a>
+</div>
+</div>
 
 </body>
 </html>

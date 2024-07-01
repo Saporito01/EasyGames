@@ -12,10 +12,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    var specificPage = "/EasyGames/admin/viewGames.jsp";
-    var currentUrl = window.location.pathname;
-
-    if (currentUrl === specificPage) {
+    if (window.location.href.toLowerCase().includes("admin")) {
         var myDiv = document.getElementById("account_cart");
         if (myDiv) {
             myDiv.style.visibility = "hidden";
